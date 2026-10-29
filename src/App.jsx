@@ -16,8 +16,24 @@ import { defaultWeights, calculateStudentRisk } from "./utils/riskEngine";
 import { normalizeStudentSection } from "./utils/sectionUtils";
 
 export default function App() {
-  // User authentication session state (defaults to null so Login screen shows first)
-  const [currentUser, setCurrentUser] = useState(null);
+  // User authentication session state (persisted so refresh preserves user view)
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem("beaconedu_user");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    // Default educator session so user is not blocked on browser reload
+    return {
+      name: "Dr. Sarah Jenkins",
+      email: "s.jenkins@beaconedu.org",
+      role: "Educator",
+      title: "Section Educator & Mentor",
+      avatarInitials: "SJ",
+      district: "Institutional Academic System"
+    };
+  });
 
   // Theme state - defaults to official light (White & Sky Blue)
   const [theme, setTheme] = useState(() => localStorage.getItem("beaconedu_theme") || "light");

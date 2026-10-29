@@ -60,14 +60,14 @@ export function normalizeStudentSection(student, index = 0) {
     assigned = rawHome;
   } else {
     // Map from room number or index
-    const combined = `${rawSec} ${rawHome} ${student.id} ${student.name}`.toLowerCase();
-    if (combined.includes("105") || combined.includes("101") || combined.includes("a")) {
+    const roomText = `${rawSec} ${rawHome}`.toLowerCase();
+    if (roomText.includes("105") || roomText.includes("101") || roomText.includes("section a")) {
       assigned = "Section A";
-    } else if (combined.includes("204") || combined.includes("201") || combined.includes("b")) {
+    } else if (roomText.includes("204") || roomText.includes("201") || roomText.includes("section b")) {
       assigned = "Section B";
-    } else if (combined.includes("301") || combined.includes("305") || combined.includes("c")) {
+    } else if (roomText.includes("301") || roomText.includes("305") || roomText.includes("section c")) {
       assigned = "Section C";
-    } else if (combined.includes("112") || combined.includes("110") || combined.includes("d")) {
+    } else if (roomText.includes("112") || roomText.includes("110") || roomText.includes("section d")) {
       assigned = "Section D";
     } else {
       assigned = SECTIONS[index % SECTIONS.length];

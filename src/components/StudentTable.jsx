@@ -831,7 +831,7 @@ export default function StudentTable({
                           )}
                         </div>
                         <div style={{ fontSize: "0.68rem", color: "#64748b" }}>
-                          GPA: {student.academics.gpa.toFixed(2)}
+                          GPA: {Number(student.academics.gpa || 0).toFixed(2)}
                         </div>
                       </div>
                     </td>

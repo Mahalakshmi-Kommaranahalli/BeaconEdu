@@ -43,7 +43,7 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
         ]
       },
       academics: {
-        gpa: Math.max(1.0, (Number(currentAverage) / 100) * 4).toFixed(2),
+        gpa: Number(Math.max(1.0, (Number(currentAverage) / 100) * 4).toFixed(2)),
         currentAverage: Number(currentAverage),
         trend: [
           Math.min(100, Number(currentAverage) + 12),
