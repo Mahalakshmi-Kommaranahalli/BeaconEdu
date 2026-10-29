@@ -70,7 +70,7 @@ export default function EarlyWarningFeed({ students, risks, anonymize, onSelectS
           </h3>
         </div>
         <span style={{ fontSize: "0.72rem", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "0.3rem" }}>
-          <Clock size={12} /> Live stream updated from classroom gradebooks & attendance logs
+          <Clock size={12} /> Live stream updated from section gradebooks & attendance logs
         </span>
       </div>
 

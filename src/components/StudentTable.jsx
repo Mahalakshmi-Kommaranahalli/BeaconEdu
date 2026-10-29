@@ -23,6 +23,7 @@ export default function StudentTable({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [gradeFilter, setGradeFilter] = useState("ALL");
+  const [sectionFilter, setSectionFilter] = useState("ALL");
   const [tierFilter, setTierFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("riskScore"); // "riskScore", "attendance", "academics", "missing"
   const [sortOrder, setSortOrder] = useState("desc");
@@ -42,11 +43,14 @@ export default function StudentTable({
     const searchLower = searchTerm.toLowerCase();
     const nameMatch = student.name.toLowerCase().includes(searchLower);
     const idMatch = student.id.toLowerCase().includes(searchLower);
-    const homeroomMatch = student.homeroom.toLowerCase().includes(searchLower);
-    if (searchTerm && !nameMatch && !idMatch && !homeroomMatch) return false;
+    const sectionMatch = (student.section || student.homeroom || "").toLowerCase().includes(searchLower);
+    if (searchTerm && !nameMatch && !idMatch && !sectionMatch) return false;
 
     // Grade filter
     if (gradeFilter !== "ALL" && student.grade !== gradeFilter) return false;
+
+    // Section filter
+    if (sectionFilter !== "ALL" && (student.section || student.homeroom) !== sectionFilter) return false;
 
     // Tier filter dropdown
     if (tierFilter !== "ALL" && risk?.riskTier !== tierFilter) return false;
@@ -114,7 +118,7 @@ export default function StudentTable({
             <Search size={14} color="var(--text-muted)" style={{ marginRight: "0.4rem" }} />
             <input
               type="text"
-              placeholder={anonymize ? "Search by ID or homeroom..." : "Search name, ID, homeroom..."}
+              placeholder={anonymize ? "Search by ID or section..." : "Search name, ID, section..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
@@ -147,6 +151,27 @@ export default function StudentTable({
             <option value="10th Grade">10th Grade</option>
             <option value="11th Grade">11th Grade</option>
             <option value="12th Grade">12th Grade</option>
+          </select>
+
+          {/* Section Filter */}
+          <select
+            value={sectionFilter}
+            onChange={(e) => setSectionFilter(e.target.value)}
+            style={{
+              background: "var(--bg-surface)",
+              color: "var(--text-main)",
+              border: "1px solid var(--border-subtle)",
+              borderRadius: "var(--radius-sm)",
+              padding: "0.4rem 0.75rem",
+              fontSize: "0.8rem",
+              cursor: "pointer"
+            }}
+          >
+            <option value="ALL">All Sections</option>
+            <option value="Section A">Section A</option>
+            <option value="Section B">Section B</option>
+            <option value="Section C">Section C</option>
+            <option value="Section D">Section D</option>
           </select>
 
           {/* Risk Tier Filter */}
@@ -298,7 +323,7 @@ export default function StudentTable({
                             {displayName}
                           </div>
                           <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                            {student.grade} · {student.homeroom.split(" - ")[0]}
+                            {student.grade} · {student.section || (student.homeroom ? student.homeroom.split(" - ")[0] : "Section A")}
                           </div>
                         </div>
                       </div>

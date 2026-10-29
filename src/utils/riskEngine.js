@@ -142,14 +142,14 @@ export function calculateStudentRisk(student, weights = defaultWeights) {
   // Participation & Engagement breakdown
   if (components.participationRisk >= 55) {
     drivers.push({
-      factor: "Classroom Disengagement",
-      description: `In-class participation score is ${student.participation.score}/100. Observed behavior indicates ${student.participation.peerCollaboration.toLowerCase()} engagement.`,
+      factor: "Section Disengagement",
+      description: `Section participation score is ${student.participation.score}/100. Observed behavior indicates ${student.participation.peerCollaboration.toLowerCase()} engagement.`,
       severity: components.participationRisk >= 75 ? "critical" : "warning",
       weightImpact: Math.round(components.participationRisk * weights.participation),
     });
     suggestedInterventions.push("Low-stakes small group collaboration", "Interest-based inquiry project alignment");
   } else if (student.participation.score >= 75) {
-    protectiveFactors.push(`Active classroom voice and leadership (${student.participation.score}/100 participation)`);
+    protectiveFactors.push(`Active section voice and leadership (${student.participation.score}/100 participation)`);
   }
 
   // Teacher Observation breakdown

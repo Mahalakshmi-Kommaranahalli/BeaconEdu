@@ -175,7 +175,7 @@ export default function StudentDetailModal({
                 </span>
               </div>
               <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "2px" }}>
-                {student.id} · {student.grade} · {student.homeroom}
+                {student.id} · {student.grade} · {student.section || student.homeroom}
               </div>
             </div>
           </div>
@@ -654,7 +654,7 @@ export default function StudentDetailModal({
                 marginBottom: "1.25rem"
               }}>
                 <div style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-main)", marginBottom: "0.5rem" }}>
-                  Log New Classroom Observation
+                  Log New Section Observation
                 </div>
                 <textarea
                   value={newNoteText}

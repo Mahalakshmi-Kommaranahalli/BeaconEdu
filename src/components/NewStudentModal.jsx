@@ -4,7 +4,7 @@ import { X, UserPlus, Sparkles, CheckCircle2 } from "lucide-react";
 export default function NewStudentModal({ onAddStudent, onClose }) {
   const [name, setName] = useState("");
   const [grade, setGrade] = useState("10th Grade");
-  const [homeroom, setHomeroom] = useState("Room 204 - Mr. Harrison");
+  const [section, setSection] = useState("Section A");
   const [attendanceRate, setAttendanceRate] = useState(80);
   const [currentAverage, setCurrentAverage] = useState(65);
   const [recentDrop, setRecentDrop] = useState(-10);
@@ -26,7 +26,8 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
       id: newId,
       name: name.trim(),
       grade,
-      homeroom,
+      section,
+      homeroom: section,
       avatarColor,
       attendance: {
         overallRate: Number(attendanceRate),
@@ -198,15 +199,14 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
               </select>
             </div>
 
-            {/* Homeroom */}
+            {/* Section */}
             <div>
               <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                Homeroom / Advisory
+                Class Section
               </label>
-              <input
-                type="text"
-                value={homeroom}
-                onChange={(e) => setHomeroom(e.target.value)}
+              <select
+                value={section}
+                onChange={(e) => setSection(e.target.value)}
                 style={{
                   width: "100%",
                   background: "var(--bg-surface-elevated)",
@@ -217,7 +217,12 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
                   color: "var(--text-main)",
                   outline: "none"
                 }}
-              />
+              >
+                <option value="Section A">Section A</option>
+                <option value="Section B">Section B</option>
+                <option value="Section C">Section C</option>
+                <option value="Section D">Section D</option>
+              </select>
             </div>
 
             {/* Attendance Rate */}
@@ -283,7 +288,7 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
             {/* Participation Score */}
             <div>
               <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                Classroom Engagement: {participationScore}/100
+                Section Engagement: {participationScore}/100
               </label>
               <input
                 type="range"

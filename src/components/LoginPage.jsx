@@ -54,7 +54,7 @@ export default function LoginPage({ onLogin }) {
 
     setTimeout(() => {
       const formattedName = formatNameFromEmail(email);
-      let title = "Classroom Educator";
+      let title = "Section Educator & Mentor";
       if (role === "Counselor") {
         title = "Student Success & Guidance Counselor";
       } else if (role === "Administrator") {

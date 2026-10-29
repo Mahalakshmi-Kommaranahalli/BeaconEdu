@@ -4,7 +4,8 @@ export const initialStudents = [
     id: "STU-1001",
     name: "Marcus Vance",
     grade: "10th Grade",
-    homeroom: "Room 204 - Mr. Harrison",
+    section: "Section A",
+    homeroom: "Section A",
     avatarColor: "#ef4444",
     attendance: {
       overallRate: 68,
@@ -69,7 +70,8 @@ export const initialStudents = [
     id: "STU-1002",
     name: "Sophia Chen",
     grade: "11th Grade",
-    homeroom: "Room 112 - Mrs. Lawson",
+    section: "Section B",
+    homeroom: "Section B",
     avatarColor: "#f59e0b",
     attendance: {
       overallRate: 83,
@@ -126,7 +128,8 @@ export const initialStudents = [
     id: "STU-1003",
     name: "Devon Miller",
     grade: "12th Grade",
-    homeroom: "Room 301 - Dr. Albright",
+    section: "Section C",
+    homeroom: "Section C",
     avatarColor: "#ef4444",
     attendance: {
       overallRate: 62,
@@ -183,7 +186,8 @@ export const initialStudents = [
     id: "STU-1004",
     name: "Amara Patel",
     grade: "9th Grade",
-    homeroom: "Room 105 - Ms. Ramirez",
+    section: "Section D",
+    homeroom: "Section D",
     avatarColor: "#10b981",
     attendance: {
       overallRate: 97,
@@ -240,7 +244,8 @@ export const initialStudents = [
     id: "STU-1005",
     name: "Liam Gallagher",
     grade: "10th Grade",
-    homeroom: "Room 204 - Mr. Harrison",
+    section: "Section A",
+    homeroom: "Section A",
     avatarColor: "#f59e0b",
     attendance: {
       overallRate: 79,
@@ -297,7 +302,8 @@ export const initialStudents = [
     id: "STU-1006",
     name: "Zoe Washington",
     grade: "11th Grade",
-    homeroom: "Room 112 - Mrs. Lawson",
+    section: "Section B",
+    homeroom: "Section B",
     avatarColor: "#10b981",
     attendance: {
       overallRate: 91,
@@ -354,7 +360,8 @@ export const initialStudents = [
     id: "STU-1007",
     name: "Mateo Rodriguez",
     grade: "9th Grade",
-    homeroom: "Room 105 - Ms. Ramirez",
+    section: "Section D",
+    homeroom: "Section D",
     avatarColor: "#ef4444",
     attendance: {
       overallRate: 72,
@@ -411,7 +418,8 @@ export const initialStudents = [
     id: "STU-1008",
     name: "Chloe Nguyen",
     grade: "10th Grade",
-    homeroom: "Room 204 - Mr. Harrison",
+    section: "Section A",
+    homeroom: "Section A",
     avatarColor: "#0284c7",
     attendance: {
       overallRate: 95,
@@ -468,7 +476,8 @@ export const initialStudents = [
     id: "STU-1009",
     name: "Isaiah Jackson",
     grade: "12th Grade",
-    homeroom: "Room 301 - Dr. Albright",
+    section: "Section C",
+    homeroom: "Section C",
     avatarColor: "#f59e0b",
     attendance: {
       overallRate: 82,
@@ -525,7 +534,8 @@ export const initialStudents = [
     id: "STU-1010",
     name: "Hannah Becker",
     grade: "11th Grade",
-    homeroom: "Room 112 - Mrs. Lawson",
+    section: "Section B",
+    homeroom: "Section B",
     avatarColor: "#10b981",
     attendance: {
       overallRate: 98,
@@ -582,7 +592,8 @@ export const initialStudents = [
     id: "STU-1011",
     name: "Jordan Lee",
     grade: "9th Grade",
-    homeroom: "Room 105 - Ms. Ramirez",
+    section: "Section D",
+    homeroom: "Section D",
     avatarColor: "#ef4444",
     attendance: {
       overallRate: 70,
@@ -639,7 +650,8 @@ export const initialStudents = [
     id: "STU-1012",
     name: "Elena Rostova",
     grade: "10th Grade",
-    homeroom: "Room 204 - Mr. Harrison",
+    section: "Section A",
+    homeroom: "Section A",
     avatarColor: "#f59e0b",
     attendance: {
       overallRate: 85,

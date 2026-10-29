@@ -223,10 +223,10 @@ export default function CohortRiskChart({ students, risks }) {
             </div>
           </div>
 
-          {/* Classroom Participation */}
+          {/* Section Participation */}
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.76rem", marginBottom: "0.25rem" }}>
-              <span style={{ color: "var(--text-main)", fontWeight: "600" }}>Classroom Engagement Score</span>
+              <span style={{ color: "var(--text-main)", fontWeight: "600" }}>Section Engagement Score</span>
               <span style={{ color: avgParticipation >= 70 ? "#059669" : "#0284c7", fontWeight: "700" }}>{avgParticipation}/100</span>
             </div>
             <div style={{ height: "7px", background: "#e2e8f0", borderRadius: "4px", overflow: "hidden" }}>
