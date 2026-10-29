@@ -1,41 +1,88 @@
 // Helper utility to normalize students into clean Sections (Section A, B, C, D)
-// and provide metadata for the orderwise Section Flow.
+// and Engineering Branches (CSE, ISE, ECE, AIML, ME, EEE).
 
 export const SECTIONS = ["Section A", "Section B", "Section C", "Section D"];
+
+export const BRANCHES = ["CSE", "ISE", "ECE", "AIML", "ME", "EEE"];
+
+export const BRANCH_DETAILS = {
+  "CSE": {
+    code: "CSE",
+    fullName: "Computer Science & Engineering",
+    shortName: "Computer Science",
+    color: "#0284c7",
+    bg: "#e0f2fe"
+  },
+  "ISE": {
+    code: "ISE",
+    fullName: "Information Science & Engineering",
+    shortName: "Information Science",
+    color: "#0369a1",
+    bg: "#bae6fd"
+  },
+  "ECE": {
+    code: "ECE",
+    fullName: "Electronics & Communication Engineering",
+    shortName: "Electronics & Comm",
+    color: "#0284c7",
+    bg: "#e0f2fe"
+  },
+  "AIML": {
+    code: "AIML",
+    fullName: "Artificial Intelligence & Machine Learning",
+    shortName: "AI & Data Science",
+    color: "#075985",
+    bg: "#7dd3fc"
+  },
+  "ME": {
+    code: "ME",
+    fullName: "Mechanical Engineering",
+    shortName: "Mechanical Engg",
+    color: "#0284c7",
+    bg: "#e0f2fe"
+  },
+  "EEE": {
+    code: "EEE",
+    fullName: "Electrical & Electronics Engineering",
+    shortName: "Electrical & Electronics",
+    color: "#0369a1",
+    bg: "#bae6fd"
+  }
+};
 
 export const SECTION_METADATA = {
   "Section A": {
     name: "Section A",
-    alias: "Foundation Cohort (Rooms 101-105)",
-    mentor: "Ms. Evelyn Reed & Mr. David Kim",
-    gradeSpan: "Grade 9 & 10",
+    alias: "CSE & AIML Engineering Dept",
+    mentor: "Prof. Evelyn Reed & Dr. David Kim",
+    gradeSpan: "Engineering Dept A",
     color: "#0284c7",
     bg: "#e0f2fe",
     order: 1
   },
   "Section B": {
     name: "Section B",
-    alias: "Core Academic Cohort (Rooms 201-204)",
-    mentor: "Mr. Tyler Brooks & Dr. Alan Turing",
-    gradeSpan: "Grade 10 & 11",
+    alias: "ISE & Systems Engineering Dept",
+    mentor: "Prof. Tyler Brooks & Dr. Alan Turing",
+    gradeSpan: "Engineering Dept B",
     color: "#0369a1",
     bg: "#bae6fd",
     order: 2
   },
   "Section C": {
     name: "Section C",
-    alias: "Senior Graduation Cohort (Rooms 301-305)",
-    mentor: "Ms. Sarah Vance & Coach Miller",
-    gradeSpan: "Grade 11 & 12",
+    alias: "ECE & Hardware Engineering Dept",
+    mentor: "Prof. Sarah Vance & Dr. Shannon",
+    gradeSpan: "Engineering Dept C",
     color: "#0284c7",
     bg: "#e0f2fe",
     order: 3
   },
   "Section D": {
     name: "Section D",
-    alias: "Interdisciplinary Cohort (Rooms 110-115)",
-    mentor: "Mr. Arthur Harrison & Counselor Diaz",
-    gradeSpan: "Grade 9 & 12",
+    alias: "Core Engineering & Robotics Dept",
+    mentor: "Prof. Arthur Harrison & Counselor Diaz",
+    gradeSpan: "Engineering Dept D",
     color: "#075985",
     bg: "#7dd3fc",
     order: 4
@@ -44,7 +91,7 @@ export const SECTION_METADATA = {
 
 /**
  * Normalizes any student object to ensure strict Section A/B/C/D
- * with zero remaining "Room" text.
+ * and Engineering Branch (CSE, ISE, ECE, AIML, ME, EEE).
  */
 export function normalizeStudentSection(student, index = 0) {
   if (!student) return student;
@@ -74,9 +121,22 @@ export function normalizeStudentSection(student, index = 0) {
     }
   }
 
+  // Engineering Branch normalization
+  let assignedBranch = "CSE";
+  const rawBranch = (student.branch || "").trim();
+  if (BRANCHES.includes(rawBranch)) {
+    assignedBranch = rawBranch;
+  } else {
+    // Map legacy grade or index to Engineering branch
+    const branchCycle = ["CSE", "ISE", "ECE", "AIML", "ME", "EEE"];
+    assignedBranch = branchCycle[index % branchCycle.length];
+  }
+
   return {
     ...student,
     section: assigned,
-    homeroom: assigned // Replace homeroom entirely so no legacy code can display Room
+    homeroom: assigned,
+    branch: assignedBranch,
+    grade: assignedBranch // Mirror branch to grade for backward compatibility
   };
 }

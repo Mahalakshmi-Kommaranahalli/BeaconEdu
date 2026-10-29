@@ -189,7 +189,7 @@ export default function InterventionHub({
                               {displayName}
                             </div>
                             <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                              {student.grade} · {student.section || (student.homeroom ? student.homeroom.split(" - ")[0] : "Section A")}
+                              {student.branch || student.grade} · {student.section || "Section A"}
                             </div>
                           </div>
                           <span className={`badge ${risk?.badgeClass}`}>

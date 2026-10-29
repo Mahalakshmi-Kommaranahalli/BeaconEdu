@@ -3,7 +3,7 @@ import { X, UserPlus, Sparkles, CheckCircle2 } from "lucide-react";
 
 export default function NewStudentModal({ onAddStudent, onClose }) {
   const [name, setName] = useState("");
-  const [grade, setGrade] = useState("10th Grade");
+  const [branch, setBranch] = useState("Computer Science (CSE)");
   const [section, setSection] = useState("Section A");
   const [attendanceRate, setAttendanceRate] = useState(80);
   const [currentAverage, setCurrentAverage] = useState(65);
@@ -25,7 +25,8 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
     const newStudent = {
       id: newId,
       name: name.trim(),
-      grade,
+      branch,
+      grade: branch,
       section,
       homeroom: section,
       avatarColor,
@@ -174,14 +175,14 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
               />
             </div>
 
-            {/* Grade */}
+            {/* Engineering Branch */}
             <div>
               <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                Grade Level
+                Engineering Branch
               </label>
               <select
-                value={grade}
-                onChange={(e) => setGrade(e.target.value)}
+                value={branch}
+                onChange={(e) => setBranch(e.target.value)}
                 style={{
                   width: "100%",
                   background: "var(--bg-surface-elevated)",
@@ -192,10 +193,12 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
                   color: "var(--text-main)"
                 }}
               >
-                <option value="9th Grade">9th Grade</option>
-                <option value="10th Grade">10th Grade</option>
-                <option value="11th Grade">11th Grade</option>
-                <option value="12th Grade">12th Grade</option>
+                <option value="Computer Science (CSE)">Computer Science & Engineering (CSE)</option>
+                <option value="Information Science (ISE)">Information Science & Engineering (ISE)</option>
+                <option value="Electronics & Communication (ECE)">Electronics & Communication (ECE)</option>
+                <option value="AI & Machine Learning (AIML)">AI & Machine Learning (AIML)</option>
+                <option value="Mechanical Engineering (ME)">Mechanical Engineering (ME)</option>
+                <option value="Electrical & Electronics (EEE)">Electrical & Electronics (EEE)</option>
               </select>
             </div>
 

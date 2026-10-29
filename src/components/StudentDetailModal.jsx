@@ -175,7 +175,7 @@ export default function StudentDetailModal({
                 </span>
               </div>
               <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "2px" }}>
-                {student.id} · {student.grade} · {student.section || student.homeroom}
+                {student.id} · {student.branch || student.grade} · {student.section || student.homeroom}
               </div>
             </div>
           </div>

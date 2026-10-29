@@ -50,18 +50,20 @@ export default function App() {
     return saved ? JSON.parse(saved) : defaultWeights;
   });
 
-  // Students cohort dataset (strictly normalized into Section A, B, C, D)
+  // Students cohort dataset (strictly normalized into Section A, B, C, D and Engineering Branches)
   const [students, setStudents] = useState(() => {
-    const saved = localStorage.getItem("beaconedu_students_v4") || localStorage.getItem("beaconedu_students");
+    const saved = localStorage.getItem("beaconedu_students_v5");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         return parsed.map((s, idx) => normalizeStudentSection(s, idx));
-      } catch (e) {
-        return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
-      }
+      } catch (e) {}
     }
-    return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
+    const normalized = initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
+    try {
+      localStorage.setItem("beaconedu_students_v5", JSON.stringify(normalized));
+    } catch (e) {}
+    return normalized;
   });
 
   // Modals state
@@ -86,7 +88,7 @@ export default function App() {
 
   // Persist students
   useEffect(() => {
-    localStorage.setItem("beaconedu_students_v4", JSON.stringify(students));
+    localStorage.setItem("beaconedu_students_v5", JSON.stringify(students));
     localStorage.setItem("beaconedu_students", JSON.stringify(students));
   }, [students]);
 

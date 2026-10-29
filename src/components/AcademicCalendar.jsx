@@ -855,7 +855,7 @@ export default function AcademicCalendar({
                 >
                   {students.map((st) => (
                     <option key={st.id} value={st.id}>
-                      {anonymize ? st.id : st.name} ({st.grade} · {st.section || "Section A"}) — Risk: {risks[st.id]?.compositeScore || 0}%
+                      {anonymize ? st.id : st.name} ({st.branch || st.grade} · {st.section || "Section A"}) — Risk: {risks[st.id]?.compositeScore || 0}%
                     </option>
                   ))}
                 </select>

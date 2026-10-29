@@ -27,7 +27,7 @@ export default function StudentTable({
   onClearFilter
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [gradeFilter, setGradeFilter] = useState("ALL");
+  const [branchFilter, setBranchFilter] = useState("ALL");
   const [activeSection, setActiveSection] = useState("ALL"); // "ALL" | "Section A" | "Section B" | "Section C" | "Section D"
   const [tierFilter, setTierFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("riskScore"); // "riskScore", "section", "attendance", "academics", "missing"
@@ -54,10 +54,14 @@ export default function StudentTable({
     const nameMatch = student.name.toLowerCase().includes(searchLower);
     const idMatch = student.id.toLowerCase().includes(searchLower);
     const sectionMatch = (student.section || "Section A").toLowerCase().includes(searchLower);
-    if (searchTerm && !nameMatch && !idMatch && !sectionMatch) return false;
+    const branchMatch = (student.branch || student.grade || "").toLowerCase().includes(searchLower);
+    if (searchTerm && !nameMatch && !idMatch && !sectionMatch && !branchMatch) return false;
 
-    // Grade filter
-    if (gradeFilter !== "ALL" && student.grade !== gradeFilter) return false;
+    // Engineering Branch filter
+    if (branchFilter !== "ALL") {
+      const studentBr = (student.branch || student.grade || "");
+      if (studentBr !== branchFilter && !studentBr.includes(branchFilter)) return false;
+    }
 
     // Active Section filter
     if (activeSection !== "ALL" && (student.section || "Section A") !== activeSection) return false;
@@ -571,7 +575,7 @@ export default function StudentTable({
             <Search size={14} color="#64748b" style={{ marginRight: "0.4rem" }} />
             <input
               type="text"
-              placeholder={anonymize ? "Search by ID or section..." : "Search name, ID, section..."}
+              placeholder={anonymize ? "Search by ID, branch, section..." : "Search name, ID, branch, section..."}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
@@ -585,10 +589,10 @@ export default function StudentTable({
             />
           </div>
 
-          {/* Grade Selector */}
+          {/* Engineering Branch Selector */}
           <select
-            value={gradeFilter}
-            onChange={(e) => setGradeFilter(e.target.value)}
+            value={branchFilter}
+            onChange={(e) => setBranchFilter(e.target.value)}
             style={{
               background: "#ffffff",
               color: "#1e293b",
@@ -596,14 +600,17 @@ export default function StudentTable({
               borderRadius: "6px",
               padding: "0.35rem 0.65rem",
               fontSize: "0.78rem",
-              cursor: "pointer"
+              cursor: "pointer",
+              fontWeight: "600"
             }}
           >
-            <option value="ALL">All Grades</option>
-            <option value="9th Grade">9th Grade</option>
-            <option value="10th Grade">10th Grade</option>
-            <option value="11th Grade">11th Grade</option>
-            <option value="12th Grade">12th Grade</option>
+            <option value="ALL">All Engineering Branches</option>
+            <option value="CSE">CSE — Computer Science</option>
+            <option value="ISE">ISE — Information Science</option>
+            <option value="ECE">ECE — Electronics & Comm</option>
+            <option value="AIML">AIML — AI & Machine Learning</option>
+            <option value="ME">ME — Mechanical Engg</option>
+            <option value="EEE">EEE — Electrical & Electronics</option>
           </select>
 
           {/* Active Filter Pill */}
@@ -767,8 +774,17 @@ export default function StudentTable({
                           <div style={{ fontWeight: "700", fontSize: "0.88rem", color: "#0f172a" }}>
                             {displayName}
                           </div>
-                          <div style={{ fontSize: "0.72rem", color: "#64748b", display: "flex", alignItems: "center", gap: "0.3rem" }}>
-                            <span>{student.grade}</span>
+                          <div style={{ fontSize: "0.72rem", color: "#64748b", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                            <span style={{
+                              fontWeight: "700",
+                              color: "#0369a1",
+                              background: "#e0f2fe",
+                              padding: "0.1rem 0.4rem",
+                              borderRadius: "4px",
+                              fontSize: "0.7rem"
+                            }}>
+                              {student.branch || student.grade}
+                            </span>
                             <span>·</span>
                             <span style={{
                               fontWeight: "700",
