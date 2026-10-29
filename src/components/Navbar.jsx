@@ -7,9 +7,10 @@ import {
   Sliders, 
   Sun, 
   Moon, 
-  UserPlus,
-  LogOut,
-  UserCheck
+  UserPlus, 
+  LogOut, 
+  UserCheck,
+  Calendar
 } from "lucide-react";
 
 export default function Navbar({
@@ -99,6 +100,27 @@ export default function Navbar({
             }}
           >
             Cohort Dashboard
+          </button>
+          <button
+            onClick={() => setActiveTab("calendar")}
+            style={{
+              padding: "0.45rem 0.95rem",
+              borderRadius: "6px",
+              border: "none",
+              fontSize: "0.84rem",
+              fontWeight: "600",
+              cursor: "pointer",
+              background: activeTab === "calendar" ? "#0284c7" : "transparent",
+              color: activeTab === "calendar" ? "#ffffff" : "#475569",
+              boxShadow: activeTab === "calendar" ? "0 2px 6px rgba(2, 132, 199, 0.25)" : "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.45rem",
+              transition: "all 0.18s"
+            }}
+          >
+            <Calendar size={15} />
+            Intervention Calendar
           </button>
           <button
             onClick={() => setActiveTab("interventions")}

@@ -10,8 +10,10 @@ import AlgorithmConfigModal from "./components/AlgorithmConfigModal";
 import PrivacyGovernanceModal from "./components/PrivacyGovernanceModal";
 import NewStudentModal from "./components/NewStudentModal";
 import LoginPage from "./components/LoginPage";
+import AcademicCalendar from "./components/AcademicCalendar";
 import { initialStudents } from "./data/initialStudents";
 import { defaultWeights, calculateStudentRisk } from "./utils/riskEngine";
+import { normalizeStudentSection } from "./utils/sectionUtils";
 
 export default function App() {
   // User authentication session state (defaults to null so Login screen shows first)
@@ -32,10 +34,18 @@ export default function App() {
     return saved ? JSON.parse(saved) : defaultWeights;
   });
 
-  // Students cohort dataset
+  // Students cohort dataset (strictly normalized into Section A, B, C, D)
   const [students, setStudents] = useState(() => {
-    const saved = localStorage.getItem("beaconedu_students");
-    return saved ? JSON.parse(saved) : initialStudents;
+    const saved = localStorage.getItem("beaconedu_students_v4") || localStorage.getItem("beaconedu_students");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.map((s, idx) => normalizeStudentSection(s, idx));
+      } catch (e) {
+        return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
+      }
+    }
+    return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
   });
 
   // Modals state
@@ -60,6 +70,7 @@ export default function App() {
 
   // Persist students
   useEffect(() => {
+    localStorage.setItem("beaconedu_students_v4", JSON.stringify(students));
     localStorage.setItem("beaconedu_students", JSON.stringify(students));
   }, [students]);
 
@@ -206,7 +217,17 @@ export default function App() {
           </div>
         )}
 
-        {/* TAB 2: INTERVENTION MANAGEMENT HUB */}
+        {/* TAB 2: ACADEMIC & INTERVENTION CALENDAR */}
+        {activeTab === "calendar" && (
+          <AcademicCalendar
+            students={students}
+            risks={risks}
+            anonymize={anonymize}
+            onSelectStudent={setSelectedStudent}
+          />
+        )}
+
+        {/* TAB 3: INTERVENTION MANAGEMENT HUB */}
         {activeTab === "interventions" && (
           <InterventionHub
             students={students}
