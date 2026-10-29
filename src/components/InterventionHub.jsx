@@ -188,8 +188,8 @@ export default function InterventionHub({
                             <div style={{ fontWeight: "700", fontSize: "0.86rem", color: "var(--text-main)" }}>
                               {displayName}
                             </div>
-                            <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                              {student.branch || student.grade} · {student.section || "Section A"}
+                            <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                              <span style={{ fontWeight: "700", color: "#0369a1" }}>{student.branch || student.grade}</span> · <span>{student.section || "Section A"}</span>
                             </div>
                           </div>
                           <span className={`badge ${risk?.badgeClass}`}>

@@ -59,8 +59,8 @@ export default function StudentTable({
 
     // Engineering Branch filter
     if (branchFilter !== "ALL") {
-      const studentBr = (student.branch || student.grade || "");
-      if (studentBr !== branchFilter && !studentBr.includes(branchFilter)) return false;
+      const b = student.branch || student.grade || "";
+      if (b !== branchFilter && !b.includes(branchFilter)) return false;
     }
 
     // Active Section filter
@@ -570,7 +570,7 @@ export default function StudentTable({
             borderRadius: "6px",
             border: "1px solid #cbd5e1",
             padding: "0.3rem 0.65rem",
-            width: "210px"
+            width: "220px"
           }}>
             <Search size={14} color="#64748b" style={{ marginRight: "0.4rem" }} />
             <input

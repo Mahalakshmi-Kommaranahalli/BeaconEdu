@@ -1,10 +1,10 @@
-// Realistic synthetic dataset of Engineering Students with comprehensive learning & risk indicators
+// Realistic synthetic dataset of students with comprehensive multidimensional learning indicators
 export const initialStudents = [
   {
     id: "STU-1001",
     name: "Marcus Vance",
-    branch: "Computer Science (CSE)",
     grade: "CSE",
+    branch: "CSE",
     section: "Section A",
     homeroom: "Section A",
     avatarColor: "#ef4444",
@@ -21,20 +21,20 @@ export const initialStudents = [
       recentDrop: -19,
       failedAssessments: 3,
       subjects: [
-        { name: "Data Structures & Algorithms", grade: 54, status: "Critical" },
-        { name: "Operating Systems", grade: 61, status: "Warning" },
-        { name: "Discrete Mathematics", grade: 64, status: "Warning" },
-        { name: "Computer Organization", grade: 72, status: "Satisfactory" }
+        { name: "Algebra II", grade: 54, status: "Critical" },
+        { name: "Chemistry", grade: 61, status: "Warning" },
+        { name: "World History", grade: 64, status: "Warning" },
+        { name: "English Lit", grade: 72, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 6,
-      submissionTimeliness: 52,
+      submissionTimeliness: 52, // % on time
       lmsWeeklyHours: 1.8,
       videoCompletionRate: 40
     },
     participation: {
-      score: 35,
+      score: 35, // 0-100
       classEngagement: "Low",
       peerCollaboration: "Withdrawn",
       questionsAsked: 1
@@ -43,88 +43,94 @@ export const initialStudents = [
       {
         id: "TN-1",
         date: "2026-10-24",
-        teacher: "Prof. Evelyn Reed (Data Structures)",
+        teacher: "Ms. Evelyn Reed (Algebra II)",
         sentiment: "Concern",
-        tag: "Lab & Attendance",
-        text: "Marcus missed the binary tree balancing lab. Appears overwhelmed by recursion concepts."
+        tag: "Academic & Attendance",
+        text: "Marcus missed the last two quiz prep sessions. When present, he seems disengaged and avoids asking for help with quadratic factoring."
       },
       {
         id: "TN-2",
         date: "2026-10-18",
-        teacher: "Prof. Tyler Brooks (Operating Systems)",
+        teacher: "Mr. Tyler Brooks (Chemistry)",
         sentiment: "Concern",
         tag: "Engagement",
-        text: "Arrived late to multithreading lab twice. Semaphore assignment was 4 days overdue."
+        text: "Marcus arrived 20 minutes late to lab twice this week. Lab report was turned in 4 days overdue without explanatory note."
       }
     ],
     interventionPlan: {
-      status: "In Progress",
-      assignedTo: "Prof. David Kim",
-      action: "1-on-1 Data Structures Tutoring & Algorithm Walkthrough",
-      notes: "Weekly Tuesday review on linked lists, recursion, and stack implementations."
+      status: "In Progress", // "None", "Recommended", "Approved", "In Progress", "Resolved"
+      title: "Algebra Foundation & Attendance Support Check-in",
+      strategy: "Peer Tutoring + Counselor Contact",
+      assignedTo: "Ms. Reed & Counselor Ortiz",
+      createdDate: "2026-10-20",
+      targetGoal: "Raise attendance to >82% and complete 4 pending algebra modules",
+      notes: "Met with Marcus. Transportation issue identified on Tuesdays/Thursdays. Bus schedule adjusted."
     }
   },
   {
     id: "STU-1002",
     name: "Sophia Chen",
-    branch: "Information Science (ISE)",
-    grade: "ISE",
+    grade: "AIML",
+    branch: "AIML",
     section: "Section B",
     homeroom: "Section B",
     avatarColor: "#f59e0b",
     attendance: {
       overallRate: 83,
       consecutiveAbsences: 1,
-      unexcusedCount: 3,
-      trend: [92, 89, 85, 82, 80, 83]
+      unexcusedCount: 2,
+      trend: [94, 91, 88, 85, 80, 83]
     },
     academics: {
       gpa: 2.8,
       currentAverage: 67,
-      trend: [86, 80, 75, 71, 65, 67],
+      trend: [86, 82, 79, 73, 65, 67],
       recentDrop: -19,
-      failedAssessments: 1,
+      failedAssessments: 2,
       subjects: [
-        { name: "Database Management (DBMS)", grade: 62, status: "Warning" },
-        { name: "Web Architecture", grade: 68, status: "Warning" },
-        { name: "Cloud Computing", grade: 74, status: "Satisfactory" },
-        { name: "Software Engineering", grade: 76, status: "Satisfactory" }
+        { name: "AP Physics 1", grade: 58, status: "Critical" },
+        { name: "Pre-Calculus", grade: 64, status: "Warning" },
+        { name: "US History", grade: 76, status: "Satisfactory" },
+        { name: "American Lit", grade: 81, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 4,
       submissionTimeliness: 65,
-      lmsWeeklyHours: 3.2,
+      lmsWeeklyHours: 3.4,
       videoCompletionRate: 60
     },
     participation: {
-      score: 55,
+      score: 58,
       classEngagement: "Moderate",
-      peerCollaboration: "Cooperative",
-      questionsAsked: 3
+      peerCollaboration: "Active",
+      questionsAsked: 4
     },
     teacherNotes: [
       {
         id: "TN-3",
-        date: "2026-10-22",
-        teacher: "Prof. Alan Turing (DBMS)",
+        date: "2026-10-25",
+        teacher: "Dr. Alistair Finch (AP Physics)",
         sentiment: "Concern",
-        tag: "SQL Normalization",
-        text: "Struggling with BCNF normalization questions on the mid-term test."
+        tag: "Concept Difficulty",
+        text: "Sophia demonstrates good conceptual curiosity, but struggled significantly on kinematic vectors test. Expressed feeling overwhelmed by homework volume."
       }
     ],
     interventionPlan: {
-      status: "Approved",
-      assignedTo: "Counselor Diaz",
-      action: "Database Query Lab Mentorship",
-      notes: "Assigned peer tutor for SQL join queries and relational algebra."
+      status: "Recommended",
+      title: "Physics Recitation & Time Management Pacing",
+      strategy: "Targeted Micro-Assessments & Study Hall Allocation",
+      assignedTo: "Dr. Finch",
+      createdDate: "2026-10-26",
+      targetGoal: "Retake Kinematics mastery quiz after two 1-on-1 tutoring sessions",
+      notes: "Pending educator review during weekly department consultation."
     }
   },
   {
     id: "STU-1003",
     name: "Devon Miller",
-    branch: "Electronics & Communication (ECE)",
     grade: "ECE",
+    branch: "ECE",
     section: "Section C",
     homeroom: "Section C",
     avatarColor: "#ef4444",
@@ -137,24 +143,24 @@ export const initialStudents = [
     academics: {
       gpa: 1.9,
       currentAverage: 55,
-      trend: [72, 65, 61, 58, 52, 55],
+      trend: [72, 68, 62, 59, 53, 55],
       recentDrop: -17,
       failedAssessments: 4,
       subjects: [
-        { name: "Digital Signal Processing", grade: 48, status: "Critical" },
-        { name: "Microcontrollers & Embedded C", grade: 53, status: "Critical" },
-        { name: "VLSI Circuit Design", grade: 60, status: "Warning" },
-        { name: "Signals & Systems", grade: 64, status: "Warning" }
+        { name: "Calculus AB", grade: 48, status: "Critical" },
+        { name: "Gov & Economics", grade: 58, status: "Critical" },
+        { name: "Senior English", grade: 63, status: "Warning" },
+        { name: "Environmental Sci", grade: 70, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 8,
       submissionTimeliness: 44,
       lmsWeeklyHours: 1.2,
-      videoCompletionRate: 25
+      videoCompletionRate: 35
     },
     participation: {
-      score: 25,
+      score: 28,
       classEngagement: "Low",
       peerCollaboration: "Isolated",
       questionsAsked: 0
@@ -162,55 +168,58 @@ export const initialStudents = [
     teacherNotes: [
       {
         id: "TN-4",
-        date: "2026-10-25",
-        teacher: "Prof. Sarah Vance (DSP)",
-        sentiment: "Concern",
-        tag: "Severe Attendance & Lab Failure",
-        text: "Devon missed FFT algorithm lab sessions. Capstone design milestone has not been submitted."
+        date: "2026-10-22",
+        teacher: "Mr. Samuel O'Connor (Gov & Econ)",
+        sentiment: "Urgent",
+        tag: "Attendance & Graduation Risk",
+        text: "Devon has missed 4 consecutive Friday class sessions. Senior graduation project milestone #2 has not been submitted."
       }
     ],
     interventionPlan: {
-      status: "In Progress",
-      assignedTo: "Prof. Shannon",
-      action: "ECE Lab Recovery & Academic Hearing",
-      notes: "Mandatory daily lab check-in and DSP simulation makeup package."
+      status: "Approved",
+      title: "Senior Graduation Safety Net & Parent Conference",
+      strategy: "Academic Recovery Contract + Attendance Coordinator Support",
+      assignedTo: "Dean Vance & Dr. Albright",
+      createdDate: "2026-10-23",
+      targetGoal: "Submit Milestone #2 by next Monday; establish daily attendance check-in",
+      notes: "Parent contact completed on 10/24. Meeting scheduled for Friday."
     }
   },
   {
     id: "STU-1004",
     name: "Amara Patel",
-    branch: "AI & Machine Learning (AIML)",
-    grade: "AIML",
+    grade: "ISE",
+    branch: "ISE",
     section: "Section D",
     homeroom: "Section D",
     avatarColor: "#10b981",
     attendance: {
-      overallRate: 96,
+      overallRate: 97,
       consecutiveAbsences: 0,
       unexcusedCount: 0,
-      trend: [98, 97, 95, 96, 96, 96]
+      trend: [98, 96, 98, 95, 99, 97]
     },
     academics: {
-      gpa: 3.9,
-      currentAverage: 94,
-      trend: [92, 93, 94, 95, 94, 94],
+      gpa: 3.85,
+      currentAverage: 92,
+      trend: [90, 91, 93, 91, 94, 92],
       recentDrop: 2,
       failedAssessments: 0,
       subjects: [
-        { name: "Machine Learning Math", grade: 96, status: "Satisfactory" },
-        { name: "Neural Networks & Deep Learning", grade: 94, status: "Satisfactory" },
-        { name: "Computer Vision", grade: 92, status: "Satisfactory" },
-        { name: "Python for Data Science", grade: 97, status: "Satisfactory" }
+        { name: "Biology Honors", grade: 94, status: "Exemplary" },
+        { name: "Geometry Honors", grade: 90, status: "Exemplary" },
+        { name: "World Geography", grade: 95, status: "Exemplary" },
+        { name: "English 9", grade: 89, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 0,
       submissionTimeliness: 98,
-      lmsWeeklyHours: 7.5,
-      videoCompletionRate: 98
+      lmsWeeklyHours: 6.5,
+      videoCompletionRate: 95
     },
     participation: {
-      score: 95,
+      score: 92,
       classEngagement: "High",
       peerCollaboration: "Leader",
       questionsAsked: 8
@@ -218,25 +227,28 @@ export const initialStudents = [
     teacherNotes: [
       {
         id: "TN-5",
-        date: "2026-10-20",
-        teacher: "Prof. Arthur Harrison (AIML)",
+        date: "2026-10-15",
+        teacher: "Ms. Ramirez (Geometry)",
         sentiment: "Positive",
-        tag: "Excellence",
-        text: "Outstanding implementation of CNN backpropagation from scratch."
+        tag: "Peer Leadership",
+        text: "Amara frequently assists peers during problem-solving workshops. Consistently proactive and thorough."
       }
     ],
     interventionPlan: {
-      status: "Resolved",
-      assignedTo: "Prof. Harrison",
-      action: "Peer Tutoring & AI Research Group",
-      notes: "Selected as Section D peer mentor."
+      status: "None",
+      title: "",
+      strategy: "",
+      assignedTo: "",
+      createdDate: "",
+      targetGoal: "",
+      notes: ""
     }
   },
   {
     id: "STU-1005",
     name: "Liam Gallagher",
-    branch: "Computer Science (CSE)",
-    grade: "CSE",
+    grade: "ME",
+    branch: "ME",
     section: "Section A",
     homeroom: "Section A",
     avatarColor: "#f59e0b",
@@ -244,55 +256,58 @@ export const initialStudents = [
       overallRate: 79,
       consecutiveAbsences: 2,
       unexcusedCount: 4,
-      trend: [90, 85, 81, 78, 76, 79]
+      trend: [89, 85, 82, 78, 75, 79]
     },
     academics: {
       gpa: 2.6,
       currentAverage: 69,
-      trend: [79, 76, 73, 70, 67, 69],
+      trend: [79, 75, 71, 66, 68, 69],
       recentDrop: -10,
-      failedAssessments: 1,
+      failedAssessments: 2,
       subjects: [
-        { name: "Compiler Design", grade: 63, status: "Warning" },
-        { name: "Automata & Computation", grade: 67, status: "Warning" },
-        { name: "Java Programming", grade: 75, status: "Satisfactory" },
-        { name: "Computer Networks", grade: 71, status: "Satisfactory" }
+        { name: "Geometry", grade: 62, status: "Warning" },
+        { name: "Chemistry", grade: 68, status: "Warning" },
+        { name: "Modern History", grade: 74, status: "Satisfactory" },
+        { name: "English 10", grade: 72, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 3,
       submissionTimeliness: 70,
       lmsWeeklyHours: 2.8,
-      videoCompletionRate: 55
+      videoCompletionRate: 65
     },
     participation: {
-      score: 50,
+      score: 61,
       classEngagement: "Moderate",
-      peerCollaboration: "Cooperative",
+      peerCollaboration: "Participates",
       questionsAsked: 2
     },
     teacherNotes: [
       {
         id: "TN-6",
-        date: "2026-10-15",
-        teacher: "Prof. Reed (CSE)",
+        date: "2026-10-21",
+        teacher: "Mr. Tyler Brooks (Chemistry)",
         sentiment: "Neutral",
-        tag: "Lexical Analysis",
-        text: "Understands syntax analysis but struggles with LL(1) parsing tables."
+        tag: "Inconsistency",
+        text: "Shows solid understanding on in-class spot quizzes, but often forgets to turn in assigned homework worksheets."
       }
     ],
     interventionPlan: {
-      status: "None",
-      assignedTo: null,
-      action: "Monitoring Parser Exercises",
-      notes: "Follow up after midterm compiler exam."
+      status: "Recommended",
+      title: "Digital Assignment Organizer & Submission Reminder",
+      strategy: "LMS automated notification sync + weekly advisor check-in",
+      assignedTo: "Mr. Harrison",
+      createdDate: "2026-10-24",
+      targetGoal: "Maintain zero missing homework submissions for 3 consecutive weeks",
+      notes: "Drafted recommendation for educator review."
     }
   },
   {
     id: "STU-1006",
     name: "Zoe Washington",
-    branch: "Information Science (ISE)",
-    grade: "ISE",
+    grade: "CSE",
+    branch: "CSE",
     section: "Section B",
     homeroom: "Section B",
     avatarColor: "#10b981",
@@ -300,55 +315,58 @@ export const initialStudents = [
       overallRate: 91,
       consecutiveAbsences: 0,
       unexcusedCount: 1,
-      trend: [82, 85, 87, 89, 90, 91]
+      trend: [78, 82, 85, 88, 90, 91] // recovering!
     },
     academics: {
       gpa: 3.1,
       currentAverage: 76,
-      trend: [64, 68, 71, 73, 75, 76],
+      trend: [64, 66, 69, 72, 74, 76], // positive trajectory!
       recentDrop: 12,
-      failedAssessments: 0,
+      failedAssessments: 1,
       subjects: [
-        { name: "Big Data Analytics", grade: 74, status: "Satisfactory" },
-        { name: "Information Security", grade: 78, status: "Satisfactory" },
-        { name: "Distributed Systems", grade: 75, status: "Satisfactory" },
-        { name: "Python Scripting", grade: 81, status: "Satisfactory" }
+        { name: "Algebra II", grade: 74, status: "Satisfactory" },
+        { name: "Biology", grade: 78, status: "Satisfactory" },
+        { name: "US History", grade: 80, status: "Satisfactory" },
+        { name: "Art Studio", grade: 92, status: "Exemplary" }
       ]
     },
     learningProgress: {
       missingAssignments: 1,
-      submissionTimeliness: 88,
-      lmsWeeklyHours: 4.5,
-      videoCompletionRate: 85
+      submissionTimeliness: 85,
+      lmsWeeklyHours: 4.2,
+      videoCompletionRate: 80
     },
     participation: {
       score: 75,
-      classEngagement: "High",
-      peerCollaboration: "Active",
+      classEngagement: "Active",
+      peerCollaboration: "Strong",
       questionsAsked: 5
     },
     teacherNotes: [
       {
         id: "TN-7",
         date: "2026-10-26",
-        teacher: "Prof. Brooks (ISE)",
+        teacher: "Mrs. Lawson",
         sentiment: "Positive",
-        tag: "Recovery Trend",
-        text: "Zoe has shown remarkable progress in Hadoop cluster setup labs."
+        tag: "Intervention Success",
+        text: "Zoe has responded wonderfully to our 3-week study group intervention. Her test scores increased from 64% to 76% and her attendance has stabilized."
       }
     ],
     interventionPlan: {
       status: "Resolved",
-      assignedTo: "Counselor Diaz",
-      action: "Spark & Hadoop Lab Support",
-      notes: "Successfully completed recovery plan."
+      title: "Math Fundamentals Mentorship",
+      strategy: "Peer Study Partner + Weekly Progress Tracker",
+      assignedTo: "Mrs. Lawson & Amara Patel",
+      createdDate: "2026-09-28",
+      targetGoal: "Raise grade above 70% and reduce tardiness",
+      notes: "Successfully achieved goals! Student graduated from active intervention to periodic monitoring."
     }
   },
   {
     id: "STU-1007",
     name: "Mateo Rodriguez",
-    branch: "Electronics & Communication (ECE)",
     grade: "ECE",
+    branch: "ECE",
     section: "Section D",
     homeroom: "Section D",
     avatarColor: "#ef4444",
@@ -356,111 +374,117 @@ export const initialStudents = [
       overallRate: 72,
       consecutiveAbsences: 3,
       unexcusedCount: 5,
-      trend: [86, 81, 77, 74, 69, 72]
+      trend: [86, 80, 75, 71, 68, 72]
     },
     academics: {
       gpa: 2.2,
       currentAverage: 62,
-      trend: [76, 71, 68, 64, 60, 62],
+      trend: [76, 73, 67, 60, 59, 62],
       recentDrop: -14,
-      failedAssessments: 2,
+      failedAssessments: 3,
       subjects: [
-        { name: "Electromagnetic Fields", grade: 52, status: "Critical" },
-        { name: "Communication Theory", grade: 61, status: "Warning" },
-        { name: "Embedded Systems", grade: 66, status: "Warning" },
-        { name: "Engineering Maths III", grade: 70, status: "Satisfactory" }
+        { name: "English 9", grade: 56, status: "Critical" },
+        { name: "Algebra I", grade: 63, status: "Warning" },
+        { name: "Earth Science", grade: 66, status: "Warning" },
+        { name: "Spanish I", grade: 78, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 5,
       submissionTimeliness: 55,
-      lmsWeeklyHours: 2.1,
-      videoCompletionRate: 42
+      lmsWeeklyHours: 2.0,
+      videoCompletionRate: 48
     },
     participation: {
-      score: 40,
-      classEngagement: "Low",
-      peerCollaboration: "Reluctant",
+      score: 42,
+      classEngagement: "Passive",
+      peerCollaboration: "Hesitant",
       questionsAsked: 1
     },
     teacherNotes: [
       {
         id: "TN-8",
-        date: "2026-10-21",
-        teacher: "Prof. Shannon (ECE)",
+        date: "2026-10-23",
+        teacher: "Mr. Christopher Dunn (English 9)",
         sentiment: "Concern",
-        tag: "Maxwell Equations",
-        text: "Struggling with vector calculus applications in wave propagation."
+        tag: "Reading Comprehension & ESL",
+        text: "Mateo struggles with lengthy analytical writing prompts. When asked questions verbally, he understands the story, but written assignments remain incomplete."
       }
     ],
     interventionPlan: {
       status: "In Progress",
-      assignedTo: "Prof. Vance",
-      action: "EM Wave Tutoring Group",
-      notes: "Weekly Thursday vector calculus workshop."
+      title: "Scaffolded Writing & ELL Resource Specialist Support",
+      strategy: "Graphic Organizers + Speech-to-Text accommodation",
+      assignedTo: "Mr. Dunn & ELL Specialist Hernandez",
+      createdDate: "2026-10-21",
+      targetGoal: "Complete essay drafting using structured outline templates",
+      notes: "Introduced graphic organizers. First draft submitted successfully yesterday."
     }
   },
   {
     id: "STU-1008",
     name: "Chloe Nguyen",
-    branch: "AI & Machine Learning (AIML)",
     grade: "AIML",
+    branch: "AIML",
     section: "Section A",
     homeroom: "Section A",
-    avatarColor: "#10b981",
+    avatarColor: "#0284c7",
     attendance: {
-      overallRate: 94,
+      overallRate: 95,
       consecutiveAbsences: 0,
-      unexcusedCount: 1,
-      trend: [92, 93, 94, 94, 95, 94]
+      unexcusedCount: 0,
+      trend: [96, 94, 95, 96, 94, 95]
     },
     academics: {
       gpa: 3.7,
-      currentAverage: 90,
-      trend: [88, 89, 90, 91, 90, 90],
-      recentDrop: 2,
+      currentAverage: 88,
+      trend: [86, 88, 87, 89, 87, 88],
+      recentDrop: 1,
       failedAssessments: 0,
       subjects: [
-        { name: "Natural Language Processing", grade: 92, status: "Satisfactory" },
-        { name: "Reinforcement Learning", grade: 88, status: "Satisfactory" },
-        { name: "Deep Learning Architectures", grade: 91, status: "Satisfactory" },
-        { name: "Probability & Statistics", grade: 89, status: "Satisfactory" }
+        { name: "Algebra II", grade: 89, status: "Satisfactory" },
+        { name: "Chemistry", grade: 85, status: "Satisfactory" },
+        { name: "World History", grade: 91, status: "Exemplary" },
+        { name: "English Lit", grade: 87, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 0,
-      submissionTimeliness: 95,
-      lmsWeeklyHours: 6.2,
-      videoCompletionRate: 92
+      submissionTimeliness: 94,
+      lmsWeeklyHours: 5.1,
+      videoCompletionRate: 90
     },
     participation: {
-      score: 85,
+      score: 86,
       classEngagement: "High",
-      peerCollaboration: "Active",
+      peerCollaboration: "Collaborative",
       questionsAsked: 6
     },
     teacherNotes: [
       {
         id: "TN-9",
-        date: "2026-10-19",
-        teacher: "Prof. Kim (AIML)",
+        date: "2026-10-14",
+        teacher: "Ms. Evelyn Reed",
         sentiment: "Positive",
-        tag: "Transformer Models",
-        text: "Excellent project presentation on self-attention mechanisms."
+        tag: "Consistent Work",
+        text: "Always on time and well-prepared. Model student in small group discussions."
       }
     ],
     interventionPlan: {
       status: "None",
-      assignedTo: null,
-      action: "AI Research Track",
-      notes: "Exemplary performance across all modules."
+      title: "",
+      strategy: "",
+      assignedTo: "",
+      createdDate: "",
+      targetGoal: "",
+      notes: ""
     }
   },
   {
     id: "STU-1009",
     name: "Isaiah Jackson",
-    branch: "Mechanical Engineering (ME)",
-    grade: "ME",
+    grade: "EEE",
+    branch: "EEE",
     section: "Section C",
     homeroom: "Section C",
     avatarColor: "#f59e0b",
@@ -468,111 +492,117 @@ export const initialStudents = [
       overallRate: 82,
       consecutiveAbsences: 1,
       unexcusedCount: 3,
-      trend: [93, 89, 85, 82, 80, 82]
+      trend: [88, 86, 84, 80, 81, 82]
     },
     academics: {
       gpa: 2.7,
       currentAverage: 71,
-      trend: [82, 79, 76, 73, 70, 71],
+      trend: [82, 79, 75, 70, 69, 71],
       recentDrop: -11,
       failedAssessments: 1,
       subjects: [
-        { name: "Thermodynamics", grade: 64, status: "Warning" },
-        { name: "Fluid Mechanics", grade: 68, status: "Warning" },
-        { name: "Strength of Materials", grade: 76, status: "Satisfactory" },
-        { name: "CAD/CAM Modeling", grade: 78, status: "Satisfactory" }
+        { name: "Economics", grade: 65, status: "Warning" },
+        { name: "Statistics", grade: 70, status: "Satisfactory" },
+        { name: "Senior English", grade: 74, status: "Satisfactory" },
+        { name: "Graphic Design", grade: 88, status: "Exemplary" }
       ]
     },
     learningProgress: {
       missingAssignments: 2,
       submissionTimeliness: 72,
       lmsWeeklyHours: 3.1,
-      videoCompletionRate: 64
+      videoCompletionRate: 68
     },
     participation: {
-      score: 60,
+      score: 64,
       classEngagement: "Moderate",
-      peerCollaboration: "Cooperative",
-      questionsAsked: 2
+      peerCollaboration: "Good in visual arts",
+      questionsAsked: 3
     },
     teacherNotes: [
       {
         id: "TN-10",
-        date: "2026-10-23",
-        teacher: "Prof. Miller (ME)",
-        sentiment: "Concern",
-        tag: "Carnot Cycles",
-        text: "Needs clarification on entropy calculations and heat engine efficiency."
+        date: "2026-10-19",
+        teacher: "Mr. Samuel O'Connor",
+        sentiment: "Neutral",
+        tag: "Senior Fatigue",
+        text: "Isaiah appears fatigued during 1st period Economics. Working after-school job may be affecting sleep schedule."
       }
     ],
     interventionPlan: {
-      status: "Approved",
-      assignedTo: "Prof. Miller",
-      action: "Thermodynamics Problem Solving Clinic",
-      notes: "Bi-weekly numerical practice sessions."
+      status: "Recommended",
+      title: "Schedule Consultation & Homework Pacing Adjustment",
+      strategy: "Counseling meeting to explore asynchronous module completion",
+      assignedTo: "Counselor Ortiz",
+      createdDate: "2026-10-25",
+      targetGoal: "Review work/study balance and adjust morning arrival expectations",
+      notes: "Awaiting counselor slot confirmation."
     }
   },
   {
     id: "STU-1010",
     name: "Hannah Becker",
-    branch: "Electrical & Electronics (EEE)",
-    grade: "EEE",
+    grade: "ISE",
+    branch: "ISE",
     section: "Section B",
     homeroom: "Section B",
     avatarColor: "#10b981",
     attendance: {
-      overallRate: 95,
+      overallRate: 98,
       consecutiveAbsences: 0,
       unexcusedCount: 0,
-      trend: [94, 95, 96, 95, 95, 95]
+      trend: [99, 98, 97, 98, 99, 98]
     },
     academics: {
-      gpa: 3.8,
-      currentAverage: 92,
-      trend: [90, 91, 91, 92, 92, 92],
-      recentDrop: 2,
+      gpa: 3.9,
+      currentAverage: 95,
+      trend: [94, 94, 96, 95, 96, 95],
+      recentDrop: 1,
       failedAssessments: 0,
       subjects: [
-        { name: "Power Systems", grade: 94, status: "Satisfactory" },
-        { name: "Control Systems Engineering", grade: 90, status: "Satisfactory" },
-        { name: "Electrical Machines II", grade: 93, status: "Satisfactory" },
-        { name: "Power Electronics", grade: 91, status: "Satisfactory" }
+        { name: "AP Chemistry", grade: 94, status: "Exemplary" },
+        { name: "Pre-Calculus", grade: 96, status: "Exemplary" },
+        { name: "AP US History", grade: 93, status: "Exemplary" },
+        { name: "Spanish III", grade: 97, status: "Exemplary" }
       ]
     },
     learningProgress: {
       missingAssignments: 0,
-      submissionTimeliness: 96,
-      lmsWeeklyHours: 5.8,
-      videoCompletionRate: 94
+      submissionTimeliness: 99,
+      lmsWeeklyHours: 7.2,
+      videoCompletionRate: 98
     },
     participation: {
-      score: 90,
-      classEngagement: "High",
+      score: 95,
+      classEngagement: "Exceptional",
       peerCollaboration: "Leader",
-      questionsAsked: 7
+      questionsAsked: 9
     },
     teacherNotes: [
       {
         id: "TN-11",
-        date: "2026-10-17",
-        teacher: "Prof. Turing (EEE)",
+        date: "2026-10-12",
+        teacher: "Dr. Alistair Finch",
         sentiment: "Positive",
-        tag: "Grid Stability",
-        text: "Excellent simulations on synchronous generator transient stability."
+        tag: "High Mastery",
+        text: "Outstanding laboratory analytical report. Nominated for regional Science Olympiad."
       }
     ],
     interventionPlan: {
       status: "None",
-      assignedTo: null,
-      action: "Smart Grid Design Project",
-      notes: "Top 5% student in EEE cohort."
+      title: "",
+      strategy: "",
+      assignedTo: "",
+      createdDate: "",
+      targetGoal: "",
+      notes: ""
     }
   },
   {
     id: "STU-1011",
     name: "Jordan Lee",
-    branch: "Computer Science (CSE)",
     grade: "CSE",
+    branch: "CSE",
     section: "Section D",
     homeroom: "Section D",
     avatarColor: "#ef4444",
@@ -580,55 +610,58 @@ export const initialStudents = [
       overallRate: 70,
       consecutiveAbsences: 3,
       unexcusedCount: 6,
-      trend: [88, 80, 75, 71, 66, 70]
+      trend: [85, 80, 74, 69, 65, 70]
     },
     academics: {
       gpa: 2.0,
       currentAverage: 58,
-      trend: [76, 70, 65, 60, 56, 58],
-      recentDrop: -18,
+      trend: [74, 70, 66, 61, 56, 58],
+      recentDrop: -16,
       failedAssessments: 3,
       subjects: [
-        { name: "Computer Organization", grade: 52, status: "Critical" },
-        { name: "Algorithms & Complexity", grade: 56, status: "Critical" },
-        { name: "Digital Logic Design", grade: 62, status: "Warning" },
-        { name: "Unix Shell Scripting", grade: 65, status: "Warning" }
+        { name: "Algebra I", grade: 52, status: "Critical" },
+        { name: "English 9", grade: 59, status: "Critical" },
+        { name: "Biology", grade: 63, status: "Warning" },
+        { name: "Physical Education", grade: 88, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 7,
       submissionTimeliness: 48,
       lmsWeeklyHours: 1.5,
-      videoCompletionRate: 35
+      videoCompletionRate: 38
     },
     participation: {
       score: 30,
-      classEngagement: "Low",
-      peerCollaboration: "Withdrawn",
-      questionsAsked: 1
+      classEngagement: "Passive",
+      peerCollaboration: "Disengaged",
+      questionsAsked: 0
     },
     teacherNotes: [
       {
         id: "TN-12",
-        date: "2026-10-27",
-        teacher: "Prof. Harrison (CSE)",
-        sentiment: "Concern",
-        tag: "Pipelining Architecture",
-        text: "Missed MIPS assembly simulator assignments and architecture lab quizzes."
+        date: "2026-10-25",
+        teacher: "Ms. Ramirez",
+        sentiment: "Urgent",
+        tag: "Disengagement",
+        text: "Jordan puts head on desk during morning lectures. Frequently forgets binder and Chromebook charger."
       }
     ],
     interventionPlan: {
       status: "Approved",
-      assignedTo: "Prof. Kim",
-      action: "Computer Architecture Lab Mentorship",
-      notes: "Assigned daily coding exercise roadmap."
+      title: "Freshman Transition & Executive Function Coaching",
+      strategy: "Weekly organizational check-in + Student Success Coach",
+      assignedTo: "Ms. Ramirez & Coach Davis",
+      createdDate: "2026-10-24",
+      targetGoal: "Establish daily digital binder routines and retrieve missing coursework",
+      notes: "Educator team approved intervention. First meeting set for tomorrow afternoon."
     }
   },
   {
     id: "STU-1012",
     name: "Elena Rostova",
-    branch: "Information Science (ISE)",
-    grade: "ISE",
+    grade: "ME",
+    branch: "ME",
     section: "Section A",
     homeroom: "Section A",
     avatarColor: "#f59e0b",
@@ -636,48 +669,51 @@ export const initialStudents = [
       overallRate: 85,
       consecutiveAbsences: 1,
       unexcusedCount: 2,
-      trend: [96, 92, 88, 85, 83, 85]
+      trend: [92, 90, 88, 84, 82, 85]
     },
     academics: {
       gpa: 2.9,
       currentAverage: 73,
-      trend: [84, 81, 77, 74, 71, 73],
+      trend: [84, 81, 78, 72, 70, 73],
       recentDrop: -11,
       failedAssessments: 1,
       subjects: [
-        { name: "Data Warehousing", grade: 68, status: "Warning" },
-        { name: "Full-Stack Development", grade: 72, status: "Satisfactory" },
-        { name: "Mobile App Development", grade: 77, status: "Satisfactory" },
-        { name: "Software Testing", grade: 79, status: "Satisfactory" }
+        { name: "Chemistry", grade: 66, status: "Warning" },
+        { name: "Geometry", grade: 72, status: "Satisfactory" },
+        { name: "World Lit", grade: 77, status: "Satisfactory" },
+        { name: "French II", grade: 86, status: "Satisfactory" }
       ]
     },
     learningProgress: {
       missingAssignments: 2,
       submissionTimeliness: 78,
-      lmsWeeklyHours: 3.8,
-      videoCompletionRate: 70
+      lmsWeeklyHours: 3.5,
+      videoCompletionRate: 72
     },
     participation: {
-      score: 65,
+      score: 68,
       classEngagement: "Moderate",
-      peerCollaboration: "Active",
+      peerCollaboration: "Cooperative",
       questionsAsked: 3
     },
     teacherNotes: [
       {
         id: "TN-13",
-        date: "2026-10-22",
-        teacher: "Prof. Reed (ISE)",
+        date: "2026-10-20",
+        teacher: "Mr. Tyler Brooks",
         sentiment: "Neutral",
-        tag: "ETL Pipelines",
-        text: "Struggling with dimensional modeling concepts in Data Warehousing."
+        tag: "Chemistry Math Barrier",
+        text: "Elena understands theoretical concepts well, but stoichiometrical mathematics calculations cause anxiety."
       }
     ],
     interventionPlan: {
-      status: "None",
-      assignedTo: null,
-      action: "ETL Architecture Practice",
-      notes: "Check progress at next lab cycle."
+      status: "Recommended",
+      title: "Stoichiometry & Math In Science Workshop",
+      strategy: "After-school science math clinic",
+      assignedTo: "Mr. Brooks",
+      createdDate: "2026-10-22",
+      targetGoal: "Achieve 75%+ on stoichiometry reassessment module",
+      notes: "Awaiting student schedule confirmation."
     }
   }
 ];

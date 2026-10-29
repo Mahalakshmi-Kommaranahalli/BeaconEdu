@@ -1,92 +1,70 @@
 // Helper utility to normalize students into clean Sections (Section A, B, C, D)
-// and Engineering Branches (CSE, ISE, ECE, AIML, ME, EEE).
+// and Engineering Branches (CSE, ISE, ECE, AIML, ME, EEE)
+// and provide metadata for the orderwise Section Flow.
 
 export const SECTIONS = ["Section A", "Section B", "Section C", "Section D"];
 
-export const BRANCHES = ["CSE", "ISE", "ECE", "AIML", "ME", "EEE"];
-
-export const BRANCH_DETAILS = {
-  "CSE": {
-    code: "CSE",
-    fullName: "Computer Science & Engineering",
-    shortName: "Computer Science",
-    color: "#0284c7",
-    bg: "#e0f2fe"
-  },
-  "ISE": {
-    code: "ISE",
-    fullName: "Information Science & Engineering",
-    shortName: "Information Science",
-    color: "#0369a1",
-    bg: "#bae6fd"
-  },
-  "ECE": {
-    code: "ECE",
-    fullName: "Electronics & Communication Engineering",
-    shortName: "Electronics & Comm",
-    color: "#0284c7",
-    bg: "#e0f2fe"
-  },
-  "AIML": {
-    code: "AIML",
-    fullName: "Artificial Intelligence & Machine Learning",
-    shortName: "AI & Data Science",
-    color: "#075985",
-    bg: "#7dd3fc"
-  },
-  "ME": {
-    code: "ME",
-    fullName: "Mechanical Engineering",
-    shortName: "Mechanical Engg",
-    color: "#0284c7",
-    bg: "#e0f2fe"
-  },
-  "EEE": {
-    code: "EEE",
-    fullName: "Electrical & Electronics Engineering",
-    shortName: "Electrical & Electronics",
-    color: "#0369a1",
-    bg: "#bae6fd"
-  }
-};
+export const BRANCHES = [
+  { code: "CSE", name: "Computer Science & Engineering" },
+  { code: "ISE", name: "Information Science & Engineering" },
+  { code: "ECE", name: "Electronics & Communication Engineering" },
+  { code: "AIML", name: "Artificial Intelligence & Machine Learning" },
+  { code: "ME", name: "Mechanical Engineering" },
+  { code: "EEE", name: "Electrical & Electronics Engineering" }
+];
 
 export const SECTION_METADATA = {
   "Section A": {
     name: "Section A",
-    alias: "CSE & AIML Engineering Dept",
-    mentor: "Prof. Evelyn Reed & Dr. David Kim",
-    gradeSpan: "Engineering Dept A",
+    alias: "Computer Science & AIML Cohort",
+    mentor: "Dr. Evelyn Reed (Dept. CSE) & Prof. David Kim",
+    branchSpan: "CSE · AIML",
     color: "#0284c7",
     bg: "#e0f2fe",
     order: 1
   },
   "Section B": {
     name: "Section B",
-    alias: "ISE & Systems Engineering Dept",
-    mentor: "Prof. Tyler Brooks & Dr. Alan Turing",
-    gradeSpan: "Engineering Dept B",
+    alias: "Information Science & Core Engg Cohort",
+    mentor: "Prof. Tyler Brooks (Dept. ISE) & Dr. Alan Turing",
+    branchSpan: "ISE · CSE",
     color: "#0369a1",
     bg: "#bae6fd",
     order: 2
   },
   "Section C": {
     name: "Section C",
-    alias: "ECE & Hardware Engineering Dept",
-    mentor: "Prof. Sarah Vance & Dr. Shannon",
-    gradeSpan: "Engineering Dept C",
+    alias: "Electronics & Electrical Cohort",
+    mentor: "Dr. Sarah Vance (Dept. ECE) & Prof. Miller",
+    branchSpan: "ECE · EEE",
     color: "#0284c7",
     bg: "#e0f2fe",
     order: 3
   },
   "Section D": {
     name: "Section D",
-    alias: "Core Engineering & Robotics Dept",
-    mentor: "Prof. Arthur Harrison & Counselor Diaz",
-    gradeSpan: "Engineering Dept D",
+    alias: "Mechanical & Applied Interdisciplinary Cohort",
+    mentor: "Prof. Arthur Harrison (Dept. ME) & Counselor Diaz",
+    branchSpan: "ME · Interdisciplinary",
     color: "#075985",
     bg: "#7dd3fc",
     order: 4
   }
+};
+
+const DEFAULT_BRANCH_MAP = {
+  "STU-1001": "CSE",
+  "STU-1002": "AIML",
+  "STU-1003": "ECE",
+  "STU-1004": "ISE",
+  "STU-1005": "ME",
+  "STU-1006": "CSE",
+  "STU-1007": "ECE",
+  "STU-1008": "AIML",
+  "STU-1009": "EEE",
+  "STU-1010": "ISE",
+  "STU-1011": "CSE",
+  "STU-1012": "ME"
 };
 
 /**
@@ -96,47 +74,51 @@ export const SECTION_METADATA = {
 export function normalizeStudentSection(student, index = 0) {
   if (!student) return student;
 
-  let assigned = "Section A";
+  // 1. Normalize Section
+  let assignedSection = "Section A";
   const rawSec = (student.section || "").trim();
   const rawHome = (student.homeroom || "").trim();
 
-  // If already clean Section A/B/C/D
   if (SECTIONS.includes(rawSec)) {
-    assigned = rawSec;
+    assignedSection = rawSec;
   } else if (SECTIONS.includes(rawHome)) {
-    assigned = rawHome;
+    assignedSection = rawHome;
   } else {
-    // Map from room number or index
     const roomText = `${rawSec} ${rawHome}`.toLowerCase();
     if (roomText.includes("105") || roomText.includes("101") || roomText.includes("section a")) {
-      assigned = "Section A";
+      assignedSection = "Section A";
     } else if (roomText.includes("204") || roomText.includes("201") || roomText.includes("section b")) {
-      assigned = "Section B";
+      assignedSection = "Section B";
     } else if (roomText.includes("301") || roomText.includes("305") || roomText.includes("section c")) {
-      assigned = "Section C";
+      assignedSection = "Section C";
     } else if (roomText.includes("112") || roomText.includes("110") || roomText.includes("section d")) {
-      assigned = "Section D";
+      assignedSection = "Section D";
     } else {
-      assigned = SECTIONS[index % SECTIONS.length];
+      assignedSection = SECTIONS[index % SECTIONS.length];
     }
   }
 
-  // Engineering Branch normalization
+  // 2. Normalize Engineering Branch (replace Grade)
   let assignedBranch = "CSE";
   const rawBranch = (student.branch || "").trim();
-  if (BRANCHES.includes(rawBranch)) {
+  const rawGrade = (student.grade || "").trim();
+
+  const validBranches = ["CSE", "ISE", "ECE", "AIML", "ME", "EEE", "Civil"];
+  if (validBranches.includes(rawBranch)) {
     assignedBranch = rawBranch;
+  } else if (validBranches.includes(rawGrade)) {
+    assignedBranch = rawGrade;
+  } else if (DEFAULT_BRANCH_MAP[student.id]) {
+    assignedBranch = DEFAULT_BRANCH_MAP[student.id];
   } else {
-    // Map legacy grade or index to Engineering branch
-    const branchCycle = ["CSE", "ISE", "ECE", "AIML", "ME", "EEE"];
-    assignedBranch = branchCycle[index % branchCycle.length];
+    assignedBranch = validBranches[index % validBranches.length];
   }
 
   return {
     ...student,
-    section: assigned,
-    homeroom: assigned,
+    section: assignedSection,
+    homeroom: assignedSection,
     branch: assignedBranch,
-    grade: assignedBranch // Mirror branch to grade for backward compatibility
+    grade: assignedBranch // keep grade synced to branch for backwards compatibility
   };
 }

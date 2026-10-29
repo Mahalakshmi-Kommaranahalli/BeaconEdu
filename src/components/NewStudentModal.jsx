@@ -3,7 +3,7 @@ import { X, UserPlus, Sparkles, CheckCircle2 } from "lucide-react";
 
 export default function NewStudentModal({ onAddStudent, onClose }) {
   const [name, setName] = useState("");
-  const [branch, setBranch] = useState("Computer Science (CSE)");
+  const [branch, setBranch] = useState("CSE");
   const [section, setSection] = useState("Section A");
   const [attendanceRate, setAttendanceRate] = useState(80);
   const [currentAverage, setCurrentAverage] = useState(65);
@@ -193,12 +193,12 @@ export default function NewStudentModal({ onAddStudent, onClose }) {
                   color: "var(--text-main)"
                 }}
               >
-                <option value="Computer Science (CSE)">Computer Science & Engineering (CSE)</option>
-                <option value="Information Science (ISE)">Information Science & Engineering (ISE)</option>
-                <option value="Electronics & Communication (ECE)">Electronics & Communication (ECE)</option>
-                <option value="AI & Machine Learning (AIML)">AI & Machine Learning (AIML)</option>
-                <option value="Mechanical Engineering (ME)">Mechanical Engineering (ME)</option>
-                <option value="Electrical & Electronics (EEE)">Electrical & Electronics (EEE)</option>
+                <option value="CSE">CSE — Computer Science</option>
+                <option value="ISE">ISE — Information Science</option>
+                <option value="ECE">ECE — Electronics & Comm</option>
+                <option value="AIML">AIML — AI & Machine Learning</option>
+                <option value="ME">ME — Mechanical Engg</option>
+                <option value="EEE">EEE — Electrical & Electronics</option>
               </select>
             </div>
 

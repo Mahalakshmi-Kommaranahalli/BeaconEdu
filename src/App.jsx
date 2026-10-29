@@ -52,18 +52,16 @@ export default function App() {
 
   // Students cohort dataset (strictly normalized into Section A, B, C, D and Engineering Branches)
   const [students, setStudents] = useState(() => {
-    const saved = localStorage.getItem("beaconedu_students_v5");
+    const saved = localStorage.getItem("beaconedu_students_v5") || localStorage.getItem("beaconedu_students_v4") || localStorage.getItem("beaconedu_students");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         return parsed.map((s, idx) => normalizeStudentSection(s, idx));
-      } catch (e) {}
+      } catch (e) {
+        return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
+      }
     }
-    const normalized = initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
-    try {
-      localStorage.setItem("beaconedu_students_v5", JSON.stringify(normalized));
-    } catch (e) {}
-    return normalized;
+    return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
   });
 
   // Modals state
