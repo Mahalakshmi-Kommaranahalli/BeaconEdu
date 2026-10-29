@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Search, 
   ArrowUpDown, 
@@ -7,6 +7,8 @@ import {
   Clock, 
   ChevronRight, 
   ChevronLeft,
+  ChevronsRight,
+  ChevronsLeft,
   Sparkles,
   Layers,
   ArrowRight,
@@ -32,6 +34,15 @@ export default function StudentTable({
   const [tierFilter, setTierFilter] = useState("ALL");
   const [sortBy, setSortBy] = useState("riskScore"); // "riskScore", "section", "attendance", "academics", "missing"
   const [sortOrder, setSortOrder] = useState("desc");
+
+  // Pagination for 1000+ students cohort
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25); // 25, 50, 100, 250, "ALL"
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, branchFilter, activeSection, tierFilter, selectedFilter, sortBy, sortOrder]);
 
   // Quick risk counts
   const highRiskCount = students.filter((s) => risks[s.id]?.riskTier === "High Risk").length;
@@ -130,6 +141,14 @@ export default function StudentTable({
       setActiveSection(SECTIONS[prevIdx]);
     }
   };
+
+  // Pagination calculations
+  const totalCount = sorted.length;
+  const totalPages = pageSize === "ALL" ? 1 : Math.max(1, Math.ceil(totalCount / (typeof pageSize === 'number' ? pageSize : 25)));
+  const validPage = Math.min(currentPage, totalPages);
+  const numericPageSize = typeof pageSize === 'number' ? pageSize : totalCount;
+  const startIndex = pageSize === "ALL" ? 0 : (validPage - 1) * numericPageSize;
+  const displayedStudents = pageSize === "ALL" ? sorted : sorted.slice(startIndex, startIndex + numericPageSize);
 
   return (
     <div className="glass-panel" style={{ padding: "1.25rem", margin: "1rem 0", background: "#ffffff", border: "1px solid #e2e8f0" }}>
@@ -701,7 +720,7 @@ export default function StudentTable({
                 </td>
               </tr>
             ) : (
-              sorted.map((student, index) => {
+              displayedStudents.map((student, index) => {
                 const risk = risks[student.id];
                 const displayName = anonymize ? student.id : student.name;
                 const avatarInitials = anonymize 
@@ -737,18 +756,18 @@ export default function StudentTable({
                     <td style={{ padding: "0.85rem 0.5rem 0.85rem 0.85rem" }}>
                       <span style={{
                         display: "inline-block",
-                        width: "28px",
-                        height: "28px",
-                        lineHeight: "26px",
+                        width: "36px",
+                        height: "26px",
+                        lineHeight: "24px",
                         borderRadius: "6px",
                         background: rankBg,
                         color: rankColor,
                         fontWeight: "800",
-                        fontSize: "0.74rem",
+                        fontSize: "0.72rem",
                         textAlign: "center",
                         border: `1px solid ${rankColor}33`
                       }}>
-                        #{index + 1}
+                        #{startIndex + index + 1}
                       </span>
                     </td>
 
@@ -984,6 +1003,143 @@ export default function StudentTable({
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* 5. HIGH-CAPACITY PAGINATION CONTROLS BAR */}
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "0.85rem 0.5rem 0.25rem",
+        marginTop: "0.75rem",
+        borderTop: "1px solid #e2e8f0",
+        gap: "0.75rem"
+      }}>
+        {/* Count summary */}
+        <div style={{ fontSize: "0.78rem", color: "#64748b" }}>
+          Showing <strong>{totalCount === 0 ? 0 : startIndex + 1}</strong> to <strong>{pageSize === "ALL" ? totalCount : Math.min(startIndex + numericPageSize, totalCount)}</strong> of <strong>{totalCount}</strong> students 
+          <span style={{ color: "#0284c7", fontWeight: "700", marginLeft: "0.35rem" }}>({students.length} Total Cohort)</span>
+        </div>
+
+        {/* Page Size & Navigation */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+          
+          {/* Rows per page */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.76rem", color: "#64748b" }}>
+            <span>Rows:</span>
+            <select
+              value={pageSize}
+              onChange={(e) => {
+                const val = e.target.value === "ALL" ? "ALL" : Number(e.target.value);
+                setPageSize(val);
+                setCurrentPage(1);
+              }}
+              style={{
+                padding: "0.25rem 0.45rem",
+                borderRadius: "6px",
+                border: "1px solid #cbd5e1",
+                fontSize: "0.76rem",
+                background: "#ffffff",
+                cursor: "pointer",
+                fontWeight: "600"
+              }}
+            >
+              <option value={25}>25 / page</option>
+              <option value={50}>50 / page</option>
+              <option value={100}>100 / page</option>
+              <option value={250}>250 / page</option>
+              <option value="ALL">Show All ({totalCount})</option>
+            </select>
+          </div>
+
+          {/* Page controls */}
+          {pageSize !== "ALL" && totalPages > 1 && (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+              <button
+                onClick={() => setCurrentPage(1)}
+                disabled={validPage === 1}
+                title="First Page"
+                style={{
+                  padding: "0.3rem 0.45rem",
+                  borderRadius: "6px",
+                  border: "1px solid #cbd5e1",
+                  background: validPage === 1 ? "#f8fafc" : "#ffffff",
+                  color: validPage === 1 ? "#94a3b8" : "#334155",
+                  cursor: validPage === 1 ? "not-allowed" : "pointer"
+                }}
+              >
+                <ChevronsLeft size={14} />
+              </button>
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={validPage === 1}
+                title="Previous Page"
+                style={{
+                  padding: "0.3rem 0.55rem",
+                  borderRadius: "6px",
+                  border: "1px solid #cbd5e1",
+                  background: validPage === 1 ? "#f8fafc" : "#ffffff",
+                  color: validPage === 1 ? "#94a3b8" : "#334155",
+                  cursor: validPage === 1 ? "not-allowed" : "pointer",
+                  fontSize: "0.75rem",
+                  fontWeight: "700",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.2rem"
+                }}
+              >
+                <ChevronLeft size={14} /> Prev
+              </button>
+
+              <span style={{
+                fontSize: "0.78rem",
+                fontWeight: "700",
+                color: "#0f172a",
+                padding: "0 0.5rem"
+              }}>
+                Page {validPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={validPage === totalPages}
+                title="Next Page"
+                style={{
+                  padding: "0.3rem 0.55rem",
+                  borderRadius: "6px",
+                  border: "1px solid #cbd5e1",
+                  background: validPage === totalPages ? "#f8fafc" : "#ffffff",
+                  color: validPage === totalPages ? "#94a3b8" : "#334155",
+                  cursor: validPage === totalPages ? "not-allowed" : "pointer",
+                  fontSize: "0.75rem",
+                  fontWeight: "700",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.2rem"
+                }}
+              >
+                Next <ChevronRight size={14} />
+              </button>
+              <button
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={validPage === totalPages}
+                title="Last Page"
+                style={{
+                  padding: "0.3rem 0.45rem",
+                  borderRadius: "6px",
+                  border: "1px solid #cbd5e1",
+                  background: validPage === totalPages ? "#f8fafc" : "#ffffff",
+                  color: validPage === totalPages ? "#94a3b8" : "#334155",
+                  cursor: validPage === totalPages ? "not-allowed" : "pointer"
+                }}
+              >
+                <ChevronsRight size={14} />
+              </button>
+            </div>
+          )}
+
+        </div>
       </div>
 
     </div>

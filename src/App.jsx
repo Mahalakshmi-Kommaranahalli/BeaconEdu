@@ -50,16 +50,16 @@ export default function App() {
     return saved ? JSON.parse(saved) : defaultWeights;
   });
 
-  // Students cohort dataset (strictly normalized into Section A, B, C, D and Engineering Branches)
+  // Students cohort dataset (1,000+ students across Engineering Branches and Sections)
   const [students, setStudents] = useState(() => {
-    const saved = localStorage.getItem("beaconedu_students_v5") || localStorage.getItem("beaconedu_students_v4") || localStorage.getItem("beaconedu_students");
+    const saved = localStorage.getItem("beaconedu_students_v1000");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        return parsed.map((s, idx) => normalizeStudentSection(s, idx));
-      } catch (e) {
-        return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
-      }
+        if (Array.isArray(parsed) && parsed.length >= 1000) {
+          return parsed.map((s, idx) => normalizeStudentSection(s, idx));
+        }
+      } catch (e) {}
     }
     return initialStudents.map((s, idx) => normalizeStudentSection(s, idx));
   });
@@ -84,10 +84,13 @@ export default function App() {
     localStorage.setItem("beaconedu_weights", JSON.stringify(weights));
   }, [weights]);
 
-  // Persist students
+  // Persist students safely with quota exception handling
   useEffect(() => {
-    localStorage.setItem("beaconedu_students_v5", JSON.stringify(students));
-    localStorage.setItem("beaconedu_students", JSON.stringify(students));
+    try {
+      localStorage.setItem("beaconedu_students_v1000", JSON.stringify(students));
+    } catch (e) {
+      console.warn("Storage quota limit reached for 1000+ students cohort; keeping state in memory:", e);
+    }
   }, [students]);
 
   const toggleTheme = () => {
