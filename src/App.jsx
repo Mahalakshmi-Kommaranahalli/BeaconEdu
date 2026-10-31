@@ -24,15 +24,8 @@ export default function App() {
         return JSON.parse(saved);
       } catch (e) {}
     }
-    // Default educator session so user is not blocked on browser reload
-    return {
-      name: "Dr. Sarah Jenkins",
-      email: "s.jenkins@beaconedu.org",
-      role: "Educator",
-      title: "Section Educator & Mentor",
-      avatarInitials: "SJ",
-      district: "Institutional Academic System"
-    };
+    // Default to null so user lands on the single unified Login Page
+    return null;
   });
 
   // Theme state - defaults to official light (White & Sky Blue)
@@ -107,14 +100,36 @@ export default function App() {
     localStorage.removeItem("beaconedu_user");
   };
 
-  // Calculate risks for all students
+  // Find current student record if student role is active
+  const currentStudent = useMemo(() => {
+    if (currentUser?.role !== "Student") return null;
+    const searchId = currentUser.id || currentUser.studentId;
+    const searchName = (currentUser.name || "").toLowerCase().trim();
+    return (
+      students.find(
+        (s) =>
+          (searchId && s.id === searchId) ||
+          (searchName && s.name.toLowerCase() === searchName)
+      ) || students[0]
+    );
+  }, [currentUser, students]);
+
+  // If a student is logged in, restrict all displayed data strictly to their record
+  const displayedStudents = useMemo(() => {
+    if (currentUser?.role === "Student" && currentStudent) {
+      return [currentStudent];
+    }
+    return students;
+  }, [currentUser, currentStudent, students]);
+
+  // Calculate risks for displayed students (single student if student role, cohort if educator)
   const risks = useMemo(() => {
     const map = {};
-    students.forEach((s) => {
+    displayedStudents.forEach((s) => {
       map[s.id] = calculateStudentRisk(s, weights);
     });
     return map;
-  }, [students, weights]);
+  }, [displayedStudents, weights]);
 
   // Count high risk students
   const highRiskCount = useMemo(() => {
@@ -146,9 +161,9 @@ export default function App() {
     localStorage.removeItem("beaconedu_weights");
   };
 
-  // If user is not signed in, show the split Login Page
+  // If user is not signed in, show the single unified Login Page
   if (!currentUser) {
-    return <LoginPage onLogin={handleLogin} />;
+    return <LoginPage onLogin={handleLogin} students={students} />;
   }
 
   return (
@@ -183,28 +198,44 @@ export default function App() {
           margin: "0.85rem 0",
           padding: "0.65rem 1.15rem",
           borderRadius: "8px",
-          background: "#f0f9ff",
-          border: "1px solid #bae6fd",
+          background: currentUser.role === "Student" ? "#f0fdf4" : "#f0f9ff",
+          border: `1px solid ${currentUser.role === "Student" ? "#86efac" : "#bae6fd"}`,
           boxShadow: "0 1px 3px rgba(2, 132, 199, 0.05)",
           fontSize: "0.78rem",
           color: "#334155"
         }}>
           <div>
-            💡 <strong style={{ color: "#0f172a" }}>Educator Advisory Guarantee:</strong> Welcome, {currentUser.name} ({currentUser.role}). BeaconEdu detects early signals so you can intervene before failure occurs.
+            {currentUser.role === "Student" ? (
+              <span>
+                🎓 <strong style={{ color: "#0f172a" }}>Student Academic Portal:</strong> Welcome, <strong>{currentUser.name}</strong> ({currentStudent?.id} • {currentStudent?.branch} - {currentStudent?.section}). Displaying all risk signals, course grades, and intervention records related strictly to your profile.
+              </span>
+            ) : (
+              <span>
+                💡 <strong style={{ color: "#0f172a" }}>Educator Advisory Guarantee:</strong> Welcome, <strong>{currentUser.name}</strong> ({currentUser.role}). BeaconEdu detects early signals so you can intervene before failure occurs.
+              </span>
+            )}
           </div>
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <span>🔒 Local FERPA Storage</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+            {currentUser.role === "Student" && currentStudent && (
+              <button
+                onClick={() => setSelectedStudent(currentStudent)}
+                className="btn-primary"
+                style={{ fontSize: "0.75rem", padding: "0.3rem 0.75rem" }}
+              >
+                🔍 Open My Full Deep-Dive & What-If Simulator
+              </button>
+            )}
+            <span>🔒 Confidential FERPA Storage</span>
             <span>⚖️ 100% Explainable Signals</span>
-            <span>🤝 Human-in-the-Loop</span>
           </div>
         </div>
 
-        {/* TAB 1: COHORT DASHBOARD */}
+        {/* TAB 1: DASHBOARD (Cohort for Educator, Self for Student) */}
         {activeTab === "dashboard" && (
           <div>
             {/* Top Metrics Cards */}
             <DashboardStats
-              students={students}
+              students={displayedStudents}
               risks={risks}
               selectedFilter={selectedFilter}
               onSelectFilter={(filterKey) => setSelectedFilter(selectedFilter === filterKey ? "ALL" : filterKey)}
@@ -212,7 +243,7 @@ export default function App() {
 
             {/* Early Warning Signal Alerts */}
             <EarlyWarningFeed
-              students={students}
+              students={displayedStudents}
               risks={risks}
               anonymize={anonymize}
               onSelectStudent={setSelectedStudent}
@@ -220,13 +251,13 @@ export default function App() {
 
             {/* Visual Risk Distribution Chart & Multi-Indicator Benchmark */}
             <CohortRiskChart
-              students={students}
+              students={displayedStudents}
               risks={risks}
             />
 
             {/* Student Table Roster */}
             <StudentTable
-              students={students}
+              students={displayedStudents}
               risks={risks}
               anonymize={anonymize}
               onSelectStudent={setSelectedStudent}
@@ -239,21 +270,23 @@ export default function App() {
         {/* TAB 2: ACADEMIC & INTERVENTION CALENDAR */}
         {activeTab === "calendar" && (
           <AcademicCalendar
-            students={students}
+            students={displayedStudents}
             risks={risks}
             anonymize={anonymize}
             onSelectStudent={setSelectedStudent}
+            currentUser={currentUser}
           />
         )}
 
         {/* TAB 3: INTERVENTION MANAGEMENT HUB */}
         {activeTab === "interventions" && (
           <InterventionHub
-            students={students}
+            students={displayedStudents}
             risks={risks}
             anonymize={anonymize}
             onSelectStudent={setSelectedStudent}
             onUpdateStudent={handleUpdateStudent}
+            currentUser={currentUser}
           />
         )}
 
@@ -296,6 +329,7 @@ export default function App() {
           anonymize={anonymize}
           onClose={() => setSelectedStudent(null)}
           onUpdateStudent={handleUpdateStudent}
+          currentUser={currentUser}
         />
       )}
 

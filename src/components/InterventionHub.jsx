@@ -18,9 +18,11 @@ export default function InterventionHub({
   risks,
   anonymize,
   onSelectStudent,
-  onUpdateStudent
+  onUpdateStudent,
+  currentUser
 }) {
   const [filterStage, setFilterStage] = useState("ALL");
+  const isStudent = currentUser?.role === "Student";
 
   const stages = [
     { id: "Recommended", label: "Early Detection / Recommended", icon: AlertCircle, color: "#d97706", bg: "#fffbeb" },
@@ -45,6 +47,7 @@ export default function InterventionHub({
   });
 
   const advanceStatus = (student, currentStage) => {
+    if (isStudent) return; // Prevent student tampering
     let nextStage = "Approved";
     if (currentStage === "Recommended") nextStage = "Approved";
     else if (currentStage === "Approved") nextStage = "In Progress";
@@ -78,11 +81,13 @@ export default function InterventionHub({
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <ClipboardCheck size={22} color="var(--primary)" />
               <h2 style={{ fontSize: "1.2rem", fontWeight: "800", color: "var(--text-main)" }}>
-                Educator Intervention Management Studio
+                {isStudent ? "My Academic Support & Recovery Pipeline" : "Educator Intervention Management Studio"}
               </h2>
             </div>
             <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "3px" }}>
-              Collaborative multi-tiered support workflow. Educators review, approve, modify, and track student recovery.
+              {isStudent 
+                ? "Track the real-time stage of your academic interventions and support plans created by faculty advisors." 
+                : "Collaborative multi-tiered support workflow. Educators review, approve, modify, and track student recovery."}
             </p>
           </div>
 
@@ -98,14 +103,36 @@ export default function InterventionHub({
             <Sparkles size={18} color="#10b981" />
             <div>
               <div style={{ fontSize: "0.74rem", fontWeight: "700", color: "#34d399" }}>
-                Recovery Rate Benchmark
+                {isStudent ? "Support Plan Progress" : "Recovery Rate Benchmark"}
               </div>
               <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
-                {studentsByStage["Resolved"].length} of {students.filter(s => s.interventionPlan?.status && s.interventionPlan?.status !== "None").length} active cases back on healthy trajectory
+                {isStudent 
+                  ? "Milestone status is verified and updated by your faculty mentor"
+                  : `${studentsByStage["Resolved"].length} of ${students.filter(s => s.interventionPlan?.status && s.interventionPlan?.status !== "None").length} active cases back on healthy trajectory`}
               </div>
             </div>
           </div>
         </div>
+
+        {isStudent && (
+          <div style={{
+            marginTop: "1rem",
+            padding: "0.6rem 0.85rem",
+            borderRadius: "var(--radius-sm)",
+            background: "rgba(59, 130, 246, 0.08)",
+            border: "1px solid rgba(59, 130, 246, 0.2)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            fontSize: "0.75rem",
+            color: "#1e40af"
+          }}>
+            <AlertCircle size={15} color="#3b82f6" />
+            <span>
+              <strong>Read-Only Mode:</strong> As a student, you can review all assigned interventions, mentors, and target dates. Stage transitions (Approved, In Progress, Resolved) are authorized and updated by faculty.
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 4-Column Board */}
@@ -242,7 +269,7 @@ export default function InterventionHub({
                             <ExternalLink size={12} />
                           </button>
 
-                          {stage.id !== "Resolved" && (
+                          {!isStudent && stage.id !== "Resolved" && (
                             <button
                               onClick={() => advanceStatus(student, stage.id)}
                               className="btn-primary"
@@ -255,6 +282,19 @@ export default function InterventionHub({
                               <span>{stage.id === "Recommended" ? "Approve Plan" : stage.id === "Approved" ? "Begin Support" : "Mark Recovered"}</span>
                               <ArrowRight size={12} />
                             </button>
+                          )}
+
+                          {isStudent && (
+                            <span style={{
+                              fontSize: "0.68rem",
+                              fontWeight: "600",
+                              color: "var(--text-muted)",
+                              background: "rgba(0,0,0,0.04)",
+                              padding: "0.2rem 0.5rem",
+                              borderRadius: "4px"
+                            }}>
+                              {stage.id === "Resolved" ? "✅ Completed" : "⏳ Active Stage"}
+                            </span>
                           )}
                         </div>
                       </div>

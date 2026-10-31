@@ -65,11 +65,13 @@ export default function Navbar({
                 borderRadius: "9999px",
                 fontWeight: "700"
               }}>
-                Official Academic Support System
+                {currentUser?.role === "Student" ? "🎓 Student Academic Portal" : "Official Academic Support System"}
               </span>
             </div>
             <p style={{ fontSize: "0.78rem", color: "#64748b", marginTop: "2px" }}>
-              Early Risk Identification & Human-in-the-Loop Intervention
+              {currentUser?.role === "Student"
+                ? "Confidential Student Performance & Intervention Profile"
+                : "Early Risk Identification & Human-in-the-Loop Intervention"}
             </p>
           </div>
         </div>
@@ -99,7 +101,7 @@ export default function Navbar({
               transition: "all 0.18s"
             }}
           >
-            Cohort Dashboard
+            {currentUser?.role === "Student" ? "My Dashboard" : "Cohort Dashboard"}
           </button>
           <button
             onClick={() => setActiveTab("calendar")}
@@ -120,7 +122,7 @@ export default function Navbar({
             }}
           >
             <Calendar size={15} />
-            Intervention Calendar
+            {currentUser?.role === "Student" ? "My Calendar" : "Intervention Calendar"}
           </button>
           <button
             onClick={() => setActiveTab("interventions")}
@@ -140,7 +142,7 @@ export default function Navbar({
               transition: "all 0.18s"
             }}
           >
-            Intervention Hub
+            {currentUser?.role === "Student" ? "My Interventions" : "Intervention Hub"}
             {highRiskCount > 0 && (
               <span style={{
                 background: "#dc2626",
@@ -159,54 +161,59 @@ export default function Navbar({
         {/* Quick Tools & Ethics Controls */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
           
-          {/* Privacy Anonymizer Toggle */}
-          <button
-            onClick={() => setAnonymize(!anonymize)}
-            title={anonymize ? "FERPA Privacy Mode Active: Student names and IDs masked" : "Click to mask student names for FERPA privacy & unbiased evaluation"}
-            className="btn-secondary"
-            style={{
-              fontSize: "0.78rem",
-              padding: "0.45rem 0.75rem",
-              borderColor: anonymize ? "#059669" : "#cbd5e1",
-              background: anonymize ? "#ecfdf5" : "#ffffff",
-              color: anonymize ? "#047857" : "#334155"
-            }}
-          >
-            {anonymize ? <EyeOff size={15} /> : <Eye size={15} />}
-            <span>{anonymize ? "FERPA Masked" : "Mask PII"}</span>
-          </button>
+          {/* Educator-Only Admin Controls */}
+          {currentUser?.role !== "Student" && (
+            <>
+              {/* Privacy Anonymizer Toggle */}
+              <button
+                onClick={() => setAnonymize(!anonymize)}
+                title={anonymize ? "FERPA Privacy Mode Active: Student names and IDs masked" : "Click to mask student names for FERPA privacy & unbiased evaluation"}
+                className="btn-secondary"
+                style={{
+                  fontSize: "0.78rem",
+                  padding: "0.45rem 0.75rem",
+                  borderColor: anonymize ? "#059669" : "#cbd5e1",
+                  background: anonymize ? "#ecfdf5" : "#ffffff",
+                  color: anonymize ? "#047857" : "#334155"
+                }}
+              >
+                {anonymize ? <EyeOff size={15} /> : <Eye size={15} />}
+                <span>{anonymize ? "FERPA Masked" : "Mask PII"}</span>
+              </button>
 
-          {/* Model Weights Config */}
-          <button
-            onClick={onOpenConfig}
-            title="Configure indicator weights & transparent scoring thresholds"
-            className="btn-secondary"
-            style={{ fontSize: "0.78rem", padding: "0.45rem 0.75rem" }}
-          >
-            <Sliders size={15} color="#0284c7" />
-            <span>Algorithm Weights</span>
-          </button>
+              {/* Model Weights Config */}
+              <button
+                onClick={onOpenConfig}
+                title="Configure indicator weights & transparent scoring thresholds"
+                className="btn-secondary"
+                style={{ fontSize: "0.78rem", padding: "0.45rem 0.75rem" }}
+              >
+                <Sliders size={15} color="#0284c7" />
+                <span>Algorithm Weights</span>
+              </button>
 
-          {/* Privacy & Governance Policy */}
-          <button
-            onClick={onOpenPrivacy}
-            title="Student Data Governance & Ethical AI Constraints"
-            className="btn-secondary"
-            style={{ fontSize: "0.78rem", padding: "0.45rem 0.75rem" }}
-          >
-            <ShieldCheck size={15} color="#0284c7" />
-            <span>Privacy & Ethics</span>
-          </button>
+              {/* Privacy & Governance Policy */}
+              <button
+                onClick={onOpenPrivacy}
+                title="Student Data Governance & Ethical AI Constraints"
+                className="btn-secondary"
+                style={{ fontSize: "0.78rem", padding: "0.45rem 0.75rem" }}
+              >
+                <ShieldCheck size={15} color="#0284c7" />
+                <span>Privacy & Ethics</span>
+              </button>
 
-          {/* Add Student */}
-          <button
-            onClick={onOpenNewStudent}
-            className="btn-primary"
-            style={{ fontSize: "0.78rem", padding: "0.45rem 0.85rem" }}
-          >
-            <UserPlus size={15} />
-            <span>Add Student</span>
-          </button>
+              {/* Add Student */}
+              <button
+                onClick={onOpenNewStudent}
+                className="btn-primary"
+                style={{ fontSize: "0.78rem", padding: "0.45rem 0.85rem" }}
+              >
+                <UserPlus size={15} />
+                <span>Add Student</span>
+              </button>
+            </>
+          )}
 
           {/* Theme Switcher */}
           <button

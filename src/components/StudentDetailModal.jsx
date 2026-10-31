@@ -27,9 +27,12 @@ export default function StudentDetailModal({
   weights,
   anonymize,
   onClose,
-  onUpdateStudent
+  onUpdateStudent,
+  currentUser
 }) {
   if (!student || !risk) return null;
+
+  const isStudent = currentUser?.role === "Student";
 
   const [activeTab, setActiveTab] = useState("explain"); // "explain", "trends", "subjects", "feedback", "simulator", "intervention"
   
@@ -253,6 +256,24 @@ export default function StudentDetailModal({
         {/* Modal Scrollable Body */}
         <div style={{ padding: "1.5rem", overflowY: "auto", flex: 1 }}>
           
+          {isStudent && (
+            <div style={{
+              background: "#ecfdf5",
+              border: "1px solid #6ee7b7",
+              color: "#065f46",
+              padding: "0.6rem 0.9rem",
+              borderRadius: "8px",
+              fontSize: "0.78rem",
+              marginBottom: "1.25rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
+            }}>
+              <ShieldCheck size={16} color="#059669" />
+              <span><strong>Confidential Student Record (Read-Only Mode):</strong> You have complete visibility into your diagnostic risk indicators, subject marks, and trajectories. Interventions and official notes are managed exclusively by certified faculty.</span>
+            </div>
+          )}
+
           {/* TAB 1: EXPLAINABILITY & DIAGNOSTICS */}
           {activeTab === "explain" && (
             <div>
@@ -421,24 +442,26 @@ export default function StudentDetailModal({
                           {intervention}
                         </span>
                       </div>
-                      <button
-                        onClick={() => {
-                          setPlanTitle(intervention);
-                          setActiveTab("intervention");
-                        }}
-                        style={{
-                          background: "#e0f2fe",
-                          color: "#0284c7",
-                          border: "1px solid #bae6fd",
-                          borderRadius: "4px",
-                          padding: "0.3rem 0.6rem",
-                          fontSize: "0.72rem",
-                          fontWeight: "700",
-                          cursor: "pointer"
-                        }}
-                      >
-                        Apply
-                      </button>
+                      {!isStudent && (
+                        <button
+                          onClick={() => {
+                            setPlanTitle(intervention);
+                            setActiveTab("intervention");
+                          }}
+                          style={{
+                            background: "#e0f2fe",
+                            color: "#0284c7",
+                            border: "1px solid #bae6fd",
+                            borderRadius: "4px",
+                            padding: "0.3rem 0.6rem",
+                            fontSize: "0.72rem",
+                            fontWeight: "700",
+                            cursor: "pointer"
+                          }}
+                        >
+                          Apply
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -645,77 +668,79 @@ export default function StudentDetailModal({
                 </div>
               </div>
 
-              {/* Add New Observation Form */}
-              <form onSubmit={handleAddNote} style={{
-                background: "var(--bg-surface-elevated)",
-                padding: "1rem",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid var(--border-subtle)",
-                marginBottom: "1.25rem"
-              }}>
-                <div style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-main)", marginBottom: "0.5rem" }}>
-                  Log New Section Observation
-                </div>
-                <textarea
-                  value={newNoteText}
-                  onChange={(e) => setNewNoteText(e.target.value)}
-                  placeholder="Record qualitative observation (e.g. participation changes, concept hurdles, peer interaction)..."
-                  rows={2}
-                  style={{
-                    width: "100%",
-                    background: "var(--bg-surface)",
-                    color: "var(--text-main)",
-                    border: "1px solid var(--border-subtle)",
-                    borderRadius: "6px",
-                    padding: "0.6rem",
-                    fontSize: "0.8rem",
-                    resize: "vertical",
-                    outline: "none"
-                  }}
-                />
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    <select
-                      value={newNoteSentiment}
-                      onChange={(e) => setNewNoteSentiment(e.target.value)}
-                      style={{
-                        background: "var(--bg-surface)",
-                        color: "var(--text-main)",
-                        border: "1px solid var(--border-subtle)",
-                        borderRadius: "6px",
-                        padding: "0.35rem 0.6rem",
-                        fontSize: "0.75rem"
-                      }}
-                    >
-                      <option value="Concern">Concern</option>
-                      <option value="Urgent">Urgent Alert</option>
-                      <option value="Neutral">Neutral</option>
-                      <option value="Positive">Positive Improvement</option>
-                    </select>
-
-                    <input
-                      type="text"
-                      value={newNoteTeacher}
-                      onChange={(e) => setNewNoteTeacher(e.target.value)}
-                      placeholder="Teacher Name / Course"
-                      style={{
-                        background: "var(--bg-surface)",
-                        color: "var(--text-main)",
-                        border: "1px solid var(--border-subtle)",
-                        borderRadius: "6px",
-                        padding: "0.35rem 0.6rem",
-                        fontSize: "0.75rem",
-                        width: "180px"
-                      }}
-                    />
+              {/* Add New Observation Form (Faculty Only) */}
+              {!isStudent && (
+                <form onSubmit={handleAddNote} style={{
+                  background: "var(--bg-surface-elevated)",
+                  padding: "1rem",
+                  borderRadius: "var(--radius-md)",
+                  border: "1px solid var(--border-subtle)",
+                  marginBottom: "1.25rem"
+                }}>
+                  <div style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-main)", marginBottom: "0.5rem" }}>
+                    Log New Section Observation
                   </div>
+                  <textarea
+                    value={newNoteText}
+                    onChange={(e) => setNewNoteText(e.target.value)}
+                    placeholder="Record qualitative observation (e.g. participation changes, concept hurdles, peer interaction)..."
+                    rows={2}
+                    style={{
+                      width: "100%",
+                      background: "var(--bg-surface)",
+                      color: "var(--text-main)",
+                      border: "1px solid var(--border-subtle)",
+                      borderRadius: "6px",
+                      padding: "0.6rem",
+                      fontSize: "0.8rem",
+                      resize: "vertical",
+                      outline: "none"
+                    }}
+                  />
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                      <select
+                        value={newNoteSentiment}
+                        onChange={(e) => setNewNoteSentiment(e.target.value)}
+                        style={{
+                          background: "var(--bg-surface)",
+                          color: "var(--text-main)",
+                          border: "1px solid var(--border-subtle)",
+                          borderRadius: "6px",
+                          padding: "0.35rem 0.6rem",
+                          fontSize: "0.75rem"
+                        }}
+                      >
+                        <option value="Concern">Concern</option>
+                        <option value="Urgent">Urgent Alert</option>
+                        <option value="Neutral">Neutral</option>
+                        <option value="Positive">Positive Improvement</option>
+                      </select>
 
-                  <button type="submit" className="btn-primary" style={{ fontSize: "0.75rem", padding: "0.4rem 0.8rem" }}>
-                    <Send size={13} />
-                    <span>Post Note</span>
-                  </button>
-                </div>
-              </form>
+                      <input
+                        type="text"
+                        value={newNoteTeacher}
+                        onChange={(e) => setNewNoteTeacher(e.target.value)}
+                        placeholder="Teacher Name / Course"
+                        style={{
+                          background: "var(--bg-surface)",
+                          color: "var(--text-main)",
+                          border: "1px solid var(--border-subtle)",
+                          borderRadius: "6px",
+                          padding: "0.35rem 0.6rem",
+                          fontSize: "0.75rem",
+                          width: "180px"
+                        }}
+                      />
+                    </div>
+
+                    <button type="submit" className="btn-primary" style={{ fontSize: "0.75rem", padding: "0.4rem 0.8rem" }}>
+                      <Send size={13} />
+                      <span>Post Note</span>
+                    </button>
+                  </div>
+                </form>
+              )}
 
               {/* Feed of Notes */}
               <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
@@ -910,20 +935,22 @@ export default function StudentDetailModal({
 
               </div>
 
-              {/* Action trigger */}
-              <div style={{ textAlign: "right", marginTop: "1.25rem" }}>
-                <button
-                  onClick={() => {
-                    setPlanGoal(`Achieve +${simAdjustments.attendanceBoost}% attendance and resolve ${simAdjustments.missingAssignmentsResolved} missing assignments`);
-                    setActiveTab("intervention");
-                  }}
-                  className="btn-primary"
-                  style={{ fontSize: "0.82rem" }}
-                >
-                  <CheckCircle2 size={16} />
-                  <span>Translate Simulation to Formal Action Plan</span>
-                </button>
-              </div>
+              {/* Action trigger (Faculty Only) */}
+              {!isStudent && (
+                <div style={{ textAlign: "right", marginTop: "1.25rem" }}>
+                  <button
+                    onClick={() => {
+                      setPlanGoal(`Achieve +${simAdjustments.attendanceBoost}% attendance and resolve ${simAdjustments.missingAssignmentsResolved} missing assignments`);
+                      setActiveTab("intervention");
+                    }}
+                    className="btn-primary"
+                    style={{ fontSize: "0.82rem" }}
+                  >
+                    <CheckCircle2 size={16} />
+                    <span>Translate Simulation to Formal Action Plan</span>
+                  </button>
+                </div>
+              )}
 
             </div>
           )}
@@ -931,192 +958,261 @@ export default function StudentDetailModal({
           {/* TAB 6: ACTIONABLE INTERVENTION PLAN */}
           {activeTab === "intervention" && (
             <div>
-              <div style={{
-                background: "rgba(16, 185, 129, 0.08)",
-                border: "1px solid rgba(16, 185, 129, 0.25)",
-                padding: "0.85rem 1rem",
-                borderRadius: "var(--radius-md)",
-                marginBottom: "1.25rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: "0.75rem"
-              }}>
-                <div>
-                  <div style={{ fontWeight: "700", fontSize: "0.85rem", color: "#34d399" }}>
-                    Human-in-the-Loop Educator Governance
+              {isStudent ? (
+                /* Read-Only Intervention Display for Students */
+                <div style={{
+                  background: "var(--bg-surface-elevated)",
+                  border: "1px solid var(--border-subtle)",
+                  borderRadius: "10px",
+                  padding: "1.5rem"
+                }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <div>
+                      <h4 style={{ fontSize: "1.05rem", fontWeight: "800", color: "var(--text-main)" }}>
+                        My Academic Support & Recovery Plan
+                      </h4>
+                      <p style={{ fontSize: "0.76rem", color: "var(--text-muted)" }}>
+                        Certified institutional plan established to keep your academic progress on track.
+                      </p>
+                    </div>
+                    <span style={{
+                      padding: "0.25rem 0.75rem",
+                      borderRadius: "9999px",
+                      fontSize: "0.78rem",
+                      fontWeight: "700",
+                      background: planStatus === "Resolved" ? "#ecfdf5" : "#e0f2fe",
+                      color: planStatus === "Resolved" ? "#047857" : "#0284c7",
+                      border: `1px solid ${planStatus === "Resolved" ? "#6ee7b7" : "#bae6fd"}`
+                    }}>
+                      Status: {planStatus}
+                    </span>
                   </div>
-                  <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-                    All interventions require certified educator authorization. AI cannot unilaterally penalize or modify student status.
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                    <div style={{ background: "var(--bg-surface)", padding: "0.95rem", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: "700", textTransform: "uppercase" }}>Intervention Title</div>
+                      <div style={{ fontSize: "0.92rem", fontWeight: "800", color: "var(--text-main)", marginTop: "3px" }}>{planTitle || "Course Remediation"}</div>
+                    </div>
+
+                    <div style={{ background: "var(--bg-surface)", padding: "0.95rem", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: "700", textTransform: "uppercase" }}>Support Strategy</div>
+                      <div style={{ fontSize: "0.92rem", fontWeight: "800", color: "var(--text-main)", marginTop: "3px" }}>{planStrategy || "1-on-1 Faculty Mentorship"}</div>
+                    </div>
+
+                    <div style={{ background: "var(--bg-surface)", padding: "0.95rem", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: "700", textTransform: "uppercase" }}>Assigned Faculty Mentor</div>
+                      <div style={{ fontSize: "0.92rem", fontWeight: "800", color: "var(--text-main)", marginTop: "3px" }}>{planAssigned || "Dr. Sarah Jenkins"}</div>
+                    </div>
+
+                    <div style={{ background: "var(--bg-surface)", padding: "0.95rem", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: "700", textTransform: "uppercase" }}>Measurable Goal</div>
+                      <div style={{ fontSize: "0.92rem", fontWeight: "800", color: "var(--text-main)", marginTop: "3px" }}>{planGoal || "Raise attendance above 85% and resolve pending submissions"}</div>
+                    </div>
+                  </div>
+
+                  {planNotes && (
+                    <div style={{ background: "var(--bg-surface)", padding: "0.95rem", borderRadius: "8px", border: "1px solid var(--border-subtle)", marginBottom: "1rem" }}>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: "700", textTransform: "uppercase" }}>Advisor Notes & Instructions</div>
+                      <div style={{ fontSize: "0.84rem", color: "var(--text-main)", marginTop: "3px", lineHeight: 1.45 }}>{planNotes}</div>
+                    </div>
+                  )}
+
+                  <div style={{ fontSize: "0.74rem", color: "var(--text-muted)", fontStyle: "italic", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <ShieldCheck size={14} color="#059669" />
+                    <span>Read-Only View: All plan milestones and status transitions are authorized exclusively by your faculty mentor.</span>
                   </div>
                 </div>
+              ) : (
+                /* Editable Form for Faculty */
+                <div>
+                  <div style={{
+                    background: "rgba(16, 185, 129, 0.08)",
+                    border: "1px solid rgba(16, 185, 129, 0.25)",
+                    padding: "0.85rem 1rem",
+                    borderRadius: "var(--radius-md)",
+                    marginBottom: "1.25rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
+                    gap: "0.75rem"
+                  }}>
+                    <div>
+                      <div style={{ fontWeight: "700", fontSize: "0.85rem", color: "#34d399" }}>
+                        Human-in-the-Loop Educator Governance
+                      </div>
+                      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                        All interventions require certified educator authorization. AI cannot unilaterally penalize or modify student status.
+                      </div>
+                    </div>
 
-                {/* Status Switcher */}
-                <div style={{ display: "flex", gap: "0.4rem" }}>
-                  {["Recommended", "Approved", "In Progress", "Resolved"].map((st) => (
-                    <button
-                      key={st}
-                      type="button"
-                      onClick={() => handleSaveIntervention(st)}
+                    {/* Status Switcher */}
+                    <div style={{ display: "flex", gap: "0.4rem" }}>
+                      {["Recommended", "Approved", "In Progress", "Resolved"].map((st) => (
+                        <button
+                          key={st}
+                          type="button"
+                          onClick={() => handleSaveIntervention(st)}
+                          style={{
+                            padding: "0.35rem 0.7rem",
+                            borderRadius: "6px",
+                            border: "1px solid var(--border-subtle)",
+                            fontSize: "0.74rem",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            background: planStatus === st ? "var(--primary)" : "var(--bg-surface)",
+                            color: planStatus === st ? "#ffffff" : "var(--text-muted)"
+                          }}
+                        >
+                          {st === "Resolved" && "🎉 "}
+                          {st}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Form Fields */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
+                        Intervention Title
+                      </label>
+                      <input
+                        type="text"
+                        value={planTitle}
+                        onChange={(e) => setPlanTitle(e.target.value)}
+                        style={{
+                          width: "100%",
+                          background: "var(--bg-surface-elevated)",
+                          border: "1px solid var(--border-subtle)",
+                          borderRadius: "6px",
+                          padding: "0.55rem",
+                          fontSize: "0.82rem",
+                          color: "var(--text-main)",
+                          outline: "none"
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
+                        Support Strategy / Method
+                      </label>
+                      <input
+                        type="text"
+                        value={planStrategy}
+                        onChange={(e) => setPlanStrategy(e.target.value)}
+                        style={{
+                          width: "100%",
+                          background: "var(--bg-surface-elevated)",
+                          border: "1px solid var(--border-subtle)",
+                          borderRadius: "6px",
+                          padding: "0.55rem",
+                          fontSize: "0.82rem",
+                          color: "var(--text-main)",
+                          outline: "none"
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
+                        Assigned Educators / Support Staff
+                      </label>
+                      <input
+                        type="text"
+                        value={planAssigned}
+                        onChange={(e) => setPlanAssigned(e.target.value)}
+                        style={{
+                          width: "100%",
+                          background: "var(--bg-surface-elevated)",
+                          border: "1px solid var(--border-subtle)",
+                          borderRadius: "6px",
+                          padding: "0.55rem",
+                          fontSize: "0.82rem",
+                          color: "var(--text-main)",
+                          outline: "none"
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
+                        Measurable Success Milestone
+                      </label>
+                      <input
+                        type="text"
+                        value={planGoal}
+                        onChange={(e) => setPlanGoal(e.target.value)}
+                        style={{
+                          width: "100%",
+                          background: "var(--bg-surface-elevated)",
+                          border: "1px solid var(--border-subtle)",
+                          borderRadius: "6px",
+                          padding: "0.55rem",
+                          fontSize: "0.82rem",
+                          color: "var(--text-main)",
+                          outline: "none"
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: "1.25rem" }}>
+                    <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
+                      Intervention Case Notes & Meeting Log
+                    </label>
+                    <textarea
+                      value={planNotes}
+                      onChange={(e) => setPlanNotes(e.target.value)}
+                      rows={3}
+                      placeholder="Record parent check-ins, student commitments, progress check dates..."
                       style={{
-                        padding: "0.35rem 0.7rem",
-                        borderRadius: "6px",
+                        width: "100%",
+                        background: "var(--bg-surface-elevated)",
                         border: "1px solid var(--border-subtle)",
-                        fontSize: "0.74rem",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        background: planStatus === st ? "var(--primary)" : "var(--bg-surface)",
-                        color: planStatus === st ? "#ffffff" : "var(--text-muted)"
+                        borderRadius: "6px",
+                        padding: "0.6rem",
+                        fontSize: "0.82rem",
+                        color: "var(--text-main)",
+                        outline: "none",
+                        resize: "vertical"
                       }}
-                    >
-                      {st === "Resolved" && "🎉 "}
-                      {st}
-                    </button>
-                  ))}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
+                      Last updated: {student.interventionPlan?.createdDate || "Today"}
+                    </span>
+
+                    <div style={{ display: "flex", gap: "0.6rem" }}>
+                      <button
+                        onClick={() => handleSaveIntervention("Resolved")}
+                        className="btn-secondary"
+                        style={{
+                          borderColor: "#10b981",
+                          color: "#34d399",
+                          fontSize: "0.8rem",
+                          background: "rgba(16, 185, 129, 0.1)"
+                        }}
+                      >
+                        <Sparkles size={14} />
+                        <span>Mark Recovered & Celebrate 🎉</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleSaveIntervention()}
+                        className="btn-primary"
+                        style={{ fontSize: "0.8rem" }}
+                      >
+                        <CheckCircle2 size={15} />
+                        <span>Save Plan Changes</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              {/* Form Fields */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
-                <div>
-                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                    Intervention Title
-                  </label>
-                  <input
-                    type="text"
-                    value={planTitle}
-                    onChange={(e) => setPlanTitle(e.target.value)}
-                    style={{
-                      width: "100%",
-                      background: "var(--bg-surface-elevated)",
-                      border: "1px solid var(--border-subtle)",
-                      borderRadius: "6px",
-                      padding: "0.55rem",
-                      fontSize: "0.82rem",
-                      color: "var(--text-main)",
-                      outline: "none"
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                    Support Strategy / Method
-                  </label>
-                  <input
-                    type="text"
-                    value={planStrategy}
-                    onChange={(e) => setPlanStrategy(e.target.value)}
-                    style={{
-                      width: "100%",
-                      background: "var(--bg-surface-elevated)",
-                      border: "1px solid var(--border-subtle)",
-                      borderRadius: "6px",
-                      padding: "0.55rem",
-                      fontSize: "0.82rem",
-                      color: "var(--text-main)",
-                      outline: "none"
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                    Assigned Educators / Support Staff
-                  </label>
-                  <input
-                    type="text"
-                    value={planAssigned}
-                    onChange={(e) => setPlanAssigned(e.target.value)}
-                    style={{
-                      width: "100%",
-                      background: "var(--bg-surface-elevated)",
-                      border: "1px solid var(--border-subtle)",
-                      borderRadius: "6px",
-                      padding: "0.55rem",
-                      fontSize: "0.82rem",
-                      color: "var(--text-main)",
-                      outline: "none"
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                    Measurable Success Milestone
-                  </label>
-                  <input
-                    type="text"
-                    value={planGoal}
-                    onChange={(e) => setPlanGoal(e.target.value)}
-                    style={{
-                      width: "100%",
-                      background: "var(--bg-surface-elevated)",
-                      border: "1px solid var(--border-subtle)",
-                      borderRadius: "6px",
-                      padding: "0.55rem",
-                      fontSize: "0.82rem",
-                      color: "var(--text-main)",
-                      outline: "none"
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: "1.25rem" }}>
-                <label style={{ display: "block", fontSize: "0.75rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "0.3rem" }}>
-                  Intervention Case Notes & Meeting Log
-                </label>
-                <textarea
-                  value={planNotes}
-                  onChange={(e) => setPlanNotes(e.target.value)}
-                  rows={3}
-                  placeholder="Record parent check-ins, student commitments, progress check dates..."
-                  style={{
-                    width: "100%",
-                    background: "var(--bg-surface-elevated)",
-                    border: "1px solid var(--border-subtle)",
-                    borderRadius: "6px",
-                    padding: "0.6rem",
-                    fontSize: "0.82rem",
-                    color: "var(--text-main)",
-                    outline: "none",
-                    resize: "vertical"
-                  }}
-                />
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                  Last updated: {student.interventionPlan?.createdDate || "Today"}
-                </span>
-
-                <div style={{ display: "flex", gap: "0.6rem" }}>
-                  <button
-                    onClick={() => handleSaveIntervention("Resolved")}
-                    className="btn-secondary"
-                    style={{
-                      borderColor: "#10b981",
-                      color: "#34d399",
-                      fontSize: "0.8rem",
-                      background: "rgba(16, 185, 129, 0.1)"
-                    }}
-                  >
-                    <Sparkles size={14} />
-                    <span>Mark Recovered & Celebrate 🎉</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSaveIntervention()}
-                    className="btn-primary"
-                    style={{ fontSize: "0.8rem" }}
-                  >
-                    <CheckCircle2 size={15} />
-                    <span>Save Plan Changes</span>
-                  </button>
-                </div>
-              </div>
+              )}
 
             </div>
           )}
